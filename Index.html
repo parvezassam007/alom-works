@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Alom Ceiling, Electrical & Plumbing Works</title>
+
+<meta name="description"
+content="Alom Ceiling, Electrical & Plumbing Works - Electrical, False Ceiling, PVC Ceiling and Plumbing Services.">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f5f7fb;
+    color:#171717;
+    line-height:1.6;
+}
+
+a{
+    text-decoration:none;
+    color:inherit;
+}
+
+.container{
+    width:92%;
+    max-width:1150px;
+    margin:auto;
+}
+
+/* HEADER */
+
+header{
+    position:sticky;
+    top:0;
+    z-index:1000;
+    background:white;
+    box-shadow:0 2px 15px rgba(0,0,0,.10);
+}
+
+nav{
+    min-height:72px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.logo{
+    font-size:23px;
+    font-weight:900;
+    color:#111827;
+}
+
+.logo span{
+    color:#ffb000;
+}
+
+.nav-links{
+    display:flex;
+    gap:25px;
+    align-items:center;
+}
+
+.nav-links a{
+    font-weight:bold;
+    color:#333;
+}
+
+.nav-links a:hover{
+    color:#ff8c00;
+}
+
+.menu{
+    display:none;
+    font-size:28px;
+    border:0;
+    background:none;
+    cursor:pointer;
+}
+
+/* HERO */
+
+.hero{
+    min-height:88vh;
+    display:flex;
+    align-items:center;
+    position:relative;
+    overflow:hidden;
+    background:
+        linear-gradient(120deg,#111827,#183b56,#00796b);
+    color:white;
+}
+
+.hero:before{
+    content:"";
+    position:absolute;
+    width:450px;
+    height:450px;
+    border-radius:50%;
+    background:#ffb000;
+    opacity:.18;
+    right:-150px;
+    top:-100px;
+}
+
+.hero-content{
+    position:relative;
+    z-index:2;
+    padding:80px 0;
+}
+
+.badge{
+    display:inline-block;
+    padding:8px 14px;
+    border-radius:30px;
+    background:#ffb000;
+    color:#111;
+    font-weight:bold;
+    margin-bottom:20px;
+}
+
+.hero h1{
+    font-size:clamp(40px,7vw,75px);
+    line-height:1.05;
+    max-width:900px;
+}
+
+.hero h1 span{
+    color:#ffd34e;
+}
+
+.hero p{
+    margin-top:20px;
+    max-width:700px;
+    font-size:19px;
+    color:#e7eef5;
+}
+
+.buttons{
+    display:flex;
+    flex-wrap:wrap;
+    gap:14px;
+    margin-top:30px;
+}
+
+.btn{
+    display:inline-block;
+    padding:14px 22px;
+    border-radius:10px;
+    font-weight:bold;
+    transition:.2s;
+}
+
+.btn:hover{
+    transform:translateY(-3px);
+}
+
+.btn-yellow{
+    background:#ffb000;
+    color:#111;
+}
+
+.btn-green{
+    background:#20c76a;
+    color:white;
+}
+
+.btn-white{
+    background:white;
+    color:#111;
+}
+
+/* SECTIONS */
+
+section{
+    padding:85px 0;
+}
+
+.section-title{
+    text-align:center;
+    margin-bottom:45px;
+}
+
+.section-title small{
+    color:#f28c00;
+    font-weight:900;
+    letter-spacing:2px;
+}
+
+.section-title h2{
+    font-size:42px;
+    margin-top:8px;
+}
+
+/* ABOUT */
+
+.about{
+    background:white;
+}
+
+.about-grid{
+    display:grid;
+    grid-template-columns:1.4fr 1fr;
+    gap:45px;
+    align-items:center;
+}
+
+.about-text h2{
+    font-size:40px;
+    margin-bottom:15px;
+}
+
+.about-text p{
+    color:#666;
+    margin-bottom:14px;
+}
+
+.team-card{
+    background:linear-gradient(135deg,#fff3c4,#e0f7fa);
+    border-radius:20px;
+    padding:30px;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
+
+.team-card h3{
+    margin-bottom:18px;
+}
+
+.person{
+    padding:15px 0;
+    border-bottom:1px solid rgba(0,0,0,.1);
+    font-weight:bold;
+}
+
+.available{
+    margin-top:20px;
+    display:inline-block;
+    padding:9px 15px;
+    border-radius:30px;
+    background:#10b981;
+    color:white;
+    font-weight:bold;
+}
+
+/* SERVICES */
+
+.services{
+    background:#f5f7fb;
+}
+
+.service-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:20px;
+}
+
+.card{
+    background:white;
+    padding:28px;
+    border-radius:18px;
+    box-shadow:0 8px 25px rgba(0,0,0,.07);
+    border-top:5px solid #ffb000;
+    transition:.25s;
+}
+
+.card:nth-child(2){
+    border-top-color:#00a8ff;
+}
+
+.card:nth-child(3){
+    border-top-color:#8e44ad;
+}
+
+.card:nth-child(4){
+    border-top-color:#10b981;
+}
+
+.card:hover{
+    transform:translateY(-7px);
+}
+
+.icon{
+    font-size:40px;
+}
+
+.card h3{
+    margin:12px 0 5px;
+}
+
+.price{
+    font-size:20px;
+    font-weight:900;
+    color:#e67e00;
+}
+
+.card p:last-child{
+    color:#777;
+    margin-top:10px;
+}
+
+.note{
+    text-align:center;
+    margin-top:30px;
+    color:#777;
+}
+
+/* GALLERY */
+
+.gallery{
+    background:white;
+}
+
+.gallery-controls{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.upload{
+    display:inline-block;
+    cursor:pointer;
+    padding:13px 20px;
+    background:#111827;
+    color:white;
+    border-radius:10px;
+    font-weight:bold;
+}
+
+.upload:hover{
+    background:#ffb000;
+    color:#111;
+}
+
+.gallery-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+}
+
+.photo{
+    position:relative;
+    height:260px;
+    border-radius:15px;
+    overflow:hidden;
+    background:#e5e7eb;
+    cursor:pointer;
+}
+
+.photo img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.photo-label{
+    position:absolute;
+    bottom:0;
+    left:0;
+    right:0;
+    padding:12px;
+    background:linear-gradient(transparent,rgba(0,0,0,.8));
+    color:white;
+    font-weight:bold;
+}
+
+.delete{
+    position:absolute;
+    top:10px;
+    right:10px;
+    border:0;
+    background:#ef4444;
+    color:white;
+    padding:6px 9px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.empty{
+    grid-column:1/-1;
+    text-align:center;
+    padding:50px;
+    border:2px dashed #ddd;
+    border-radius:15px;
+    color:#777;
+}
+
+/* CONTACT */
+
+.contact{
+    background:linear-gradient(135deg,#111827,#075e54);
+    color:white;
+}
+
+.contact .section-title small{
+    color:#ffd34e;
+}
+
+.contact-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:18px;
+}
+
+.contact-card{
+    background:rgba(255,255,255,.1);
+    border:1px solid rgba(255,255,255,.15);
+    padding:22px;
+    border-radius:15px;
+    display:flex;
+    align-items:center;
+    gap:16px;
+}
+
+.contact-icon{
+    font-size:30px;
+}
+
+.contact-card small{
+    display:block;
+    color:#b9d5d1;
+}
+
+.contact-card strong{
+    font-size:17px;
+}
+
+/* WHATSAPP */
+
+.whatsapp{
+    position:fixed;
+    right:20px;
+    bottom:20px;
+    z-index:2000;
+    background:#25d366;
+    color:white;
+    padding:14px 20px;
+    border-radius:50px;
+    font-weight:900;
+    box-shadow:0 8px 25px rgba(0,0,0,.3);
+}
+
+/* FOOTER */
+
+footer{
+    background:#0b1120;
+    color:#aaa;
+    padding:30px 0;
+    text-align:center;
+}
+
+footer strong{
+    color:white;
+}
+
+/* LIGHTBOX */
+
+.lightbox{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.93);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:3000;
+    padding:20px;
+}
+
+.lightbox.show{
+    display:flex;
+}
+
+.lightbox img{
+    max-width:95%;
+    max-height:90vh;
+    object-fit:contain;
+}
+
+.close{
+    position:absolute;
+    top:15px;
+    right:25px;
+    color:white;
+    font-size:45px;
+    cursor:pointer;
+}
+
+/* MOBILE */
+
+@media(max-width:850px){
+
+    .menu{
+        display:block;
+    }
+
+    .nav-links{
+        display:none;
+        position:absolute;
+        top:72px;
+        left:0;
+        right:0;
+        background:white;
+        flex-direction:column;
+        padding:25px;
+        box-shadow:0 10px 20px rgba(0,0,0,.1);
+    }
+
+    .nav-links.show{
+        display:flex;
+    }
+
+    .about-grid{
+        grid-template-columns:1fr;
+    }
+
+    .service-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .gallery-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+@media(max-width:550px){
+
+    section{
+        padding:65px 0;
+    }
+
+    .hero{
+        min-height:80vh;
+    }
+
+    .hero h1{
+        font-size:43px;
+    }
+
+    .hero p{
+        font-size:16px;
+    }
+
+    .service-grid,
+    .gallery-grid,
+    .contact-grid{
+        grid-template-columns:1fr;
+    }
+
+    .section-title h2,
+    .about-text h2{
+        font-size:32px;
+    }
+
+    .btn{
+        width:100%;
+        text-align:center;
+    }
+
+    .whatsapp{
+        right:15px;
+        bottom:15px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<nav class="container">
+
+<a href="#home" class="logo">
+ALOM <span>WORKS</span>
+</a>
+
+<button class="menu" onclick="toggleMenu()">☰</button>
+
+<div class="nav-links" id="navLinks">
+<a href="#home">Home</a>
+<a href="#about">About</a>
+<a href="#services">Services</a>
+<a href="#gallery">Gallery</a>
+<a href="#contact">Contact</a>
+</div>
+
+</nav>
+</header>
+
+
+<!-- HERO -->
+
+<section class="hero" id="home">
+
+<div class="container hero-content">
+
+<div class="badge">AVAILABLE 7 × 15</div>
+
+<h1>
+Alom <span>Ceiling</span>, Electrical & Plumbing Works
+</h1>
+
+<p>
+Professional electrical, false ceiling, PVC ceiling and plumbing services.
+Quality workmanship with reliable service for homes, shops and commercial spaces.
+</p>
+
+<div class="buttons">
+
+<a class="btn btn-yellow"
+href="https://wa.me/919395305384?text=Hello%20Alom%20Works%2C%20I%20would%20like%20to%20know%20about%20your%20services."
+target="_blank">
+💬 WhatsApp Chat
+</a>
+
+<a class="btn btn-white" href="#services">
+View Services
+</a>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ABOUT -->
+
+<section class="about" id="about">
+
+<div class="container">
+
+<div class="section-title">
+<small>ABOUT US</small>
+<h2>Professional & Reliable</h2>
+</div>
+
+<div class="about-grid">
+
+<div class="about-text">
+
+<h2>Quality Work. Honest Service.</h2>
+
+<p>
+Alom Ceiling, Electrical & Plumbing Works provides reliable electrical,
+false ceiling, PVC ceiling and plumbing services.
+</p>
+
+<p>
+We focus on quality workmanship, transparent pricing and dependable service
+for homes, shops and commercial spaces.
+</p>
+
+<p>
+Contact our team to discuss your project and get an exact quotation.
+</p>
+
+</div>
+
+<div class="team-card">
+
+<h3>Our Team</h3>
+
+<div class="person">👷 Parbez Alom</div>
+
+<div class="person">👷 Badrul Alom</div>
+
+<div class="available">
+✓ Available 7 × 15
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- SERVICES -->
+
+<section class="services" id="services">
+
+<div class="container">
+
+<div class="section-title">
+<small>OUR SERVICES</small>
+<h2>Services & Price</h2>
+</div>
+
+<div class="service-grid">
+
+<div class="card">
+<div class="icon">⚡</div>
+<h3>Electrical Point</h3>
+<div class="price">₹100 – ₹400</div>
+<p>Electrical point installation and related electrical work.</p>
+</div>
+
+<div class="card">
+<div class="icon">🏠</div>
+<h3>False Ceiling</h3>
+<div class="price">₹16 – ₹55 / sq.ft.</div>
+<p>Professional false ceiling installation and finishing.</p>
+</div>
+
+<div class="card">
+<div class="icon">▦</div>
+<h3>PVC Ceiling</h3>
+<div class="price">₹20 – ₹85 / sq.ft.</div>
+<p>Clean and durable PVC ceiling solutions.</p>
+</div>
+
+<div class="card">
+<div class="icon">🔧</div>
+<h3>Plumbing Work</h3>
+<div class="price">₹300 – ₹400</div>
+<p>General plumbing installation and repair work.</p>
+</div>
+
+</div>
+
+<p class="note">
+Final price may vary depending on the work, materials and site conditions.
+Contact us for an exact quotation.
+</p>
+
+</div>
+
+</section>
+
+
+<!-- GALLERY -->
+
+<section class="gallery" id="gallery">
+
+<div class="container">
+
+<div class="section-title">
+<small>OUR WORK</small>
+<h2>Project Gallery</h2>
+</div>
+
+<div class="gallery-controls">
+
+<label class="upload">
+＋ Add Your Photos
+<input
+type="file"
+id="photoInput"
+accept="image/jpeg,image/png,image/webp"
+multiple
+hidden>
+</label>
+
+<p style="margin-top:12px;color:#777;">
+Upload your project photos to Cloudinary.
+</p>
+
+</div>
+
+<div class="gallery-grid" id="galleryGrid"></div>
+
+</div>
+
+</section>
+
+
+<!-- CONTACT -->
+
+<section class="contact" id="contact">
+
+<div class="container">
+
+<div class="section-title">
+
+<small>CONTACT US</small>
+
+<h2>Let's Discuss Your Work</h2>
+
+</div>
+
+<div class="contact-grid">
+
+<a class="contact-card" href="tel:+919395305384">
+
+<div class="contact-icon">📞</div>
+
+<div>
+<small>Call</small>
+<strong>9395305384</strong>
+</div>
+
+</a>
+
+
+<a class="contact-card" href="tel:+919833762577">
+
+<div class="contact-icon">📞</div>
+
+<div>
+<small>Call</small>
+<strong>98337 62577</strong>
+</div>
+
+</a>
+
+
+<a class="contact-card"
+href="mailto:alomparbez124@gmail.com">
+
+<div class="contact-icon">📧</div>
+
+<div>
+<small>Email</small>
+<strong>alomparbez124@gmail.com</strong>
+</div>
+
+</a>
+
+
+<a class="contact-card"
+href="https://www.instagram.com/parvezx007/"
+target="_blank">
+
+<div class="contact-icon">📸</div>
+
+<div>
+<small>Instagram</small>
+<strong>@parvezx007</strong>
+</div>
+
+</a>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- WHATSAPP -->
+
+<a class="whatsapp"
+href="https://wa.me/919395305384?text=Hello%20Alom%20Works%2C%20I%20would%20like%20to%20know%20about%20your%20services."
+target="_blank">
+
+💬 WhatsApp
+
+</a>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+<div class="container">
+
+<strong>ALOM CEILING, ELECTRICAL & PLUMBING WORKS</strong>
+
+<br><br>
+
+© 2026 All Rights Reserved.
+
+</div>
+
+</footer>
+
+
+<!-- LIGHTBOX -->
+
+<div class="lightbox" id="lightbox">
+
+<div class="close" onclick="closeLightbox()">×</div>
+
+<img id="lightboxImage" src="" alt="Project">
+
+</div>
+
+
+<script>
+
+/* ==========================================
+   CLOUDINARY SETTINGS
+========================================== */
+
+const CLOUD_NAME = "egmwvmxe";
+const UPLOAD_PRESET = "alom_works";
+const CLOUDINARY_FOLDER = "alom_works";
+
+
+/* ==========================================
+   ELEMENTS
+========================================== */
+
+const input = document.getElementById("photoInput");
+const grid = document.getElementById("galleryGrid");
+
+let photos = JSON.parse(
+    localStorage.getItem("alomWorksPhotos") || "[]"
+);
+
+
+/* ==========================================
+   MOBILE MENU
+========================================== */
+
+function toggleMenu(){
+
+    document
+    .getElementById("navLinks")
+    .classList
+    .toggle("show");
+
+}
+
+
+/* ==========================================
+   SAVE PHOTO URLS
+========================================== */
+
+function savePhotos(){
+
+    localStorage.setItem(
+        "alomWorksPhotos",
+        JSON.stringify(photos)
+    );
+
+}
+
+
+/* ==========================================
+   SHOW GALLERY
+========================================== */
+
+function renderGallery(){
+
+    grid.innerHTML = "";
+
+    if(photos.length === 0){
+
+        grid.innerHTML = `
+        <div class="empty">
+            📸 Your project photos will appear here.
+            <br><br>
+            Click "＋ Add Your Photos" to upload.
+        </div>
+        `;
+
+        return;
+    }
+
+
+    photos.forEach(photo => {
+
+        const div = document.createElement("div");
+
+        div.className = "photo";
+
+
+        const img = document.createElement("img");
+
+        img.src = photo.src;
+
+        img.alt = "Alom Works Project";
+
+
+        const label = document.createElement("div");
+
+        label.className = "photo-label";
+
+        label.textContent = photo.category;
+
+
+        const deleteButton = document.createElement("button");
+
+        deleteButton.className = "delete";
+
+        deleteButton.textContent = "Delete";
+
+
+        deleteButton.onclick = function(event){
+
+            event.stopPropagation();
+
+            deletePhoto(photo.id);
+
+        };
+
+
+        div.appendChild(img);
+
+        div.appendChild(label);
+
+        div.appendChild(deleteButton);
+
+
+        img.addEventListener("click",function(){
+
+            document
+            .getElementById("lightboxImage")
+            .src = photo.src;
+
+            document
+            .getElementById("lightbox")
+            .classList
+            .add("show");
+
+        });
+
+
+        grid.appendChild(div);
+
+    });
+
+}
+
+
+/* ==========================================
+   CLOUDINARY UPLOAD
+========================================== */
+
+input.addEventListener("change", async function(event){
+
+    const files = [...event.target.files];
+
+
+    if(files.length === 0){
+        return;
+    }
+
+
+    for(const file of files){
+
+        if(!file.type.startsWith("image/")){
+            continue;
+        }
+
+
+        let category = prompt(
+            "Photo category likho:\n\nElectrical\nFalse Ceiling\nPVC\nPlumbing",
+            "Electrical"
+        );
+
+
+        if(!category){
+            category = "Electrical";
+        }
+
+
+        const formData = new FormData();
+
+        formData.append("file",file);
+
+        formData.append(
+            "upload_preset",
+            UPLOAD_PRESET
+        );
+
+        formData.append(
+            "folder",
+            CLOUDINARY_FOLDER
+        );
+
+
+        try{
+
+            alert("⏳ Photo Cloudinary par upload ho rahi hai...");
+
+
+            const response = await fetch(
+                `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+                {
+                    method:"POST",
+                    body:formData
+                }
+            );
+
+
+            const data = await response.json();
+
+
+            if(!response.ok){
+
+                throw new Error(
+                    data.error?.message ||
+                    "Cloudinary upload failed"
+                );
+
+            }
+
+
+            photos.unshift({
+
+                id:Date.now() + Math.random(),
+
+                src:data.secure_url,
+
+                category:category
+
+            });
+
+
+            savePhotos();
+
+            renderGallery();
+
+
+            alert("✅ Photo successfully upload ho gayi!");
+
+
+        }catch(error){
+
+            console.error(error);
+
+            alert(
+                "❌ Upload failed.\n\n" +
+                error.message
+            );
+
+        }
+
+    }
+
+
+    input.value = "";
+
+});
+
+
+/* ==========================================
+   DELETE FROM WEBSITE GALLERY
+========================================== */
+
+function deletePhoto(id){
+
+    if(
+        !confirm(
+            "Kya aap ye photo gallery se delete karna chahte ho?"
+        )
+    ){
+        return;
+    }
+
+
+    photos = photos.filter(
+        photo => photo.id !== id
+    );
+
+
+    savePhotos();
+
+    renderGallery();
+
+}
+
+
+/* ==========================================
+   CLOSE IMAGE
+========================================== */
+
+function closeLightbox(){
+
+    document
+    .getElementById("lightbox")
+    .classList
+    .remove("show");
+
+}
+
+
+/* ==========================================
+   CLOSE LIGHTBOX ON BACKGROUND CLICK
+========================================== */
+
+document
+.getElementById("lightbox")
+.addEventListener("click",function(event){
+
+    if(event.target === this){
+        closeLightbox();
+    }
+
+});
+
+
+/* ==========================================
+   INITIAL LOAD
+========================================== */
+
+renderGallery();
+
+</script>
+
+</body>
+</html>
