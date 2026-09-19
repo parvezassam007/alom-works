@@ -1,271 +1,1020 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+// ==========================================
+// PARBEZ WORKS BILLING SYSTEM
+// ==========================================
 
-body {
-  font-family: Arial, sans-serif;
-  background: #f3f4f6;
-  color: #1f2937;
-  line-height: 1.5;
-}
+let itemCount = 0;
 
-header {
-  background: linear-gradient(135deg, #111827, #2563eb);
-  color: white;
-  padding: 22px 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 15px;
-}
 
-header h1 {
-  font-size: 25px;
-  letter-spacing: 1px;
-}
+// ==========================================
+// PAGE LOAD
+// ==========================================
 
-header p {
-  font-size: 13px;
-  opacity: 0.9;
-  margin-top: 3px;
-}
+document.addEventListener("DOMContentLoaded", function () {
 
-header button {
-  background: white;
-  color: #1d4ed8;
-  border: none;
-  padding: 10px 14px;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-}
+  const dateInput = document.getElementById("date");
 
-main {
-  width: 100%;
-  max-width: 850px;
-  margin: 20px auto;
-  padding: 0 14px;
-}
-
-.card {
-  background: white;
-  padding: 20px;
-  margin-bottom: 16px;
-  border-radius: 14px;
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
-}
-
-.card h2 {
-  font-size: 19px;
-  margin-bottom: 16px;
-  color: #111827;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 15px;
-}
-
-label {
-  display: block;
-  font-size: 14px;
-  font-weight: bold;
-  margin: 10px 0 6px;
-}
-
-input,
-textarea,
-select {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  font-size: 15px;
-  outline: none;
-  background: white;
-}
-
-input:focus,
-textarea:focus,
-select:focus {
-  border-color: #2563eb;
-}
-
-textarea {
-  min-height: 80px;
-  resize: vertical;
-}
-
-.section-title {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-}
-
-.section-title h2 {
-  margin-bottom: 0;
-}
-
-.add-btn {
-  background: #16a34a;
-  color: white;
-  border: none;
-  padding: 10px 14px;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.item {
-  border: 1px solid #e5e7eb;
-  padding: 14px;
-  border-radius: 10px;
-  margin-bottom: 12px;
-  background: #f9fafb;
-}
-
-.item-grid {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
-  gap: 10px;
-}
-
-.remove-btn {
-  margin-top: 10px;
-  background: #dc2626;
-  color: white;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 7px;
-  cursor: pointer;
-}
-
-.totals {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.totals > div {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 15px;
-}
-
-.totals input {
-  max-width: 180px;
-}
-
-.grand {
-  border-top: 1px solid #e5e7eb;
-  padding-top: 14px;
-  font-size: 20px;
-}
-
-.grand strong {
-  color: #2563eb;
-}
-
-.due {
-  background: #fff7ed;
-  padding: 12px;
-  border-radius: 8px;
-}
-
-.due strong {
-  color: #ea580c;
-}
-
-.actions {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin-bottom: 25px;
-}
-
-.actions button {
-  border: none;
-  padding: 13px;
-  border-radius: 9px;
-  color: white;
-  font-size: 15px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.save-btn {
-  background: #2563eb;
-}
-
-.whatsapp-btn {
-  background: #16a34a;
-}
-
-.clear-btn {
-  background: #dc2626;
-}
-
-footer {
-  text-align: center;
-  padding: 25px 15px;
-  color: #6b7280;
-  font-size: 13px;
-}
-
-@media (max-width: 600px) {
-  header {
-    flex-direction: column;
-    align-items: stretch;
-    text-align: center;
+  if (dateInput) {
+    dateInput.valueAsDate = new Date();
   }
 
-  header button {
-    width: 100%;
+  addItem();
+
+  calculateTotal();
+
+});
+
+
+// ==========================================
+// ADD ITEM
+// ==========================================
+
+function addItem() {
+
+  itemCount++;
+
+  const itemsContainer =
+    document.getElementById("items");
+
+  if (!itemsContainer) {
+    alert("Items section not found.");
+    return;
   }
 
-  .grid,
-  .item-grid,
-  .actions {
-    grid-template-columns: 1fr;
-  }
 
-  .card {
-    padding: 16px;
-  }
+  const item =
+    document.createElement("div");
 
-  .totals > div {
-    flex-wrap: wrap;
-  }
+  item.className = "item";
 
-  .totals input {
-    max-width: 100%;
-  }
+  item.id =
+    "item-" + itemCount;
+
+
+  item.innerHTML = `
+
+    <div class="item-grid">
+
+      <div>
+
+        <label>Work / Item</label>
+
+        <input
+          type="text"
+          class="item-name"
+          placeholder="e.g. Electrical Point"
+        >
+
+      </div>
+
+
+      <div>
+
+        <label>Qty</label>
+
+        <input
+          type="number"
+          class="item-qty"
+          value="1"
+          min="0"
+        >
+
+      </div>
+
+
+      <div>
+
+        <label>Rate (₹)</label>
+
+        <input
+          type="number"
+          class="item-rate"
+          value="0"
+          min="0"
+        >
+
+      </div>
+
+    </div>
+
+
+    <button
+      type="button"
+      class="remove-btn"
+      onclick="removeItem(${itemCount})"
+    >
+      Remove
+    </button>
+
+  `;
+
+
+  itemsContainer.appendChild(item);
+
+
+  const qty =
+    item.querySelector(".item-qty");
+
+  const rate =
+    item.querySelector(".item-rate");
+
+
+  qty.addEventListener(
+    "input",
+    calculateTotal
+  );
+
+  rate.addEventListener(
+    "input",
+    calculateTotal
+  );
+
+
+  calculateTotal();
+
 }
 
-@media print {
-  body {
-    background: white;
+
+// ==========================================
+// REMOVE ITEM
+// ==========================================
+
+function removeItem(id) {
+
+  const item =
+    document.getElementById(
+      "item-" + id
+    );
+
+
+  if (item) {
+
+    item.remove();
+
+    calculateTotal();
+
   }
 
-  header button,
-  .actions,
-  .add-btn,
-  .remove-btn {
-    display: none !important;
+}
+
+
+// ==========================================
+// CALCULATE TOTAL
+// ==========================================
+
+function calculateTotal() {
+
+  let subtotal = 0;
+
+
+  const items =
+    document.querySelectorAll(".item");
+
+
+  items.forEach(function (item) {
+
+    const qty =
+      parseFloat(
+        item.querySelector(".item-qty").value
+      ) || 0;
+
+
+    const rate =
+      parseFloat(
+        item.querySelector(".item-rate").value
+      ) || 0;
+
+
+    subtotal += qty * rate;
+
+  });
+
+
+  const discount =
+    parseFloat(
+      document.getElementById("discount")?.value
+    ) || 0;
+
+
+  const paid =
+    parseFloat(
+      document.getElementById("paid")?.value
+    ) || 0;
+
+
+  const total =
+    Math.max(
+      0,
+      subtotal - discount
+    );
+
+
+  const due =
+    Math.max(
+      0,
+      total - paid
+    );
+
+
+  document.getElementById(
+    "subtotal"
+  ).textContent =
+    subtotal.toFixed(2);
+
+
+  document.getElementById(
+    "total"
+  ).textContent =
+    total.toFixed(2);
+
+
+  document.getElementById(
+    "due"
+  ).textContent =
+    due.toFixed(2);
+
+}
+
+
+// ==========================================
+// INPUT EVENTS
+// ==========================================
+
+document.addEventListener(
+  "input",
+  function (event) {
+
+    if (
+      event.target.id === "discount" ||
+      event.target.id === "paid"
+    ) {
+
+      calculateTotal();
+
+    }
+
+  }
+);
+
+
+// ==========================================
+// GET INVOICE DATA
+// ==========================================
+
+function getInvoiceData() {
+
+  const items = [];
+
+
+  document.querySelectorAll(
+    ".item"
+  ).forEach(function (item) {
+
+    const name =
+      item.querySelector(
+        ".item-name"
+      ).value.trim();
+
+
+    const qty =
+      parseFloat(
+        item.querySelector(
+          ".item-qty"
+        ).value
+      ) || 0;
+
+
+    const rate =
+      parseFloat(
+        item.querySelector(
+          ".item-rate"
+        ).value
+      ) || 0;
+
+
+    items.push({
+
+      name: name,
+
+      qty: qty,
+
+      rate: rate,
+
+      amount: qty * rate
+
+    });
+
+  });
+
+
+  return {
+
+    invoiceNo:
+      document.getElementById(
+        "invoiceNo"
+      ).value,
+
+
+    date:
+      document.getElementById(
+        "date"
+      ).value,
+
+
+    customerName:
+      document.getElementById(
+        "customerName"
+      ).value,
+
+
+    customerPhone:
+      document.getElementById(
+        "customerPhone"
+      ).value,
+
+
+    customerAddress:
+      document.getElementById(
+        "customerAddress"
+      ).value,
+
+
+    items: items,
+
+
+    subtotal:
+      parseFloat(
+        document.getElementById(
+          "subtotal"
+        ).textContent
+      ) || 0,
+
+
+    discount:
+      parseFloat(
+        document.getElementById(
+          "discount"
+        ).value
+      ) || 0,
+
+
+    total:
+      parseFloat(
+        document.getElementById(
+          "total"
+        ).textContent
+      ) || 0,
+
+
+    paid:
+      parseFloat(
+        document.getElementById(
+          "paid"
+        ).value
+      ) || 0,
+
+
+    due:
+      parseFloat(
+        document.getElementById(
+          "due"
+        ).textContent
+      ) || 0,
+
+
+    paymentStatus:
+      document.getElementById(
+        "paymentStatus"
+      ).value,
+
+
+    notes:
+      document.getElementById(
+        "notes"
+      ).value
+
+  };
+
+}
+
+
+// ==========================================
+// SAVE INVOICE
+// ==========================================
+
+function saveInvoice() {
+
+  const invoice =
+    getInvoiceData();
+
+
+  let invoices =
+    JSON.parse(
+      localStorage.getItem(
+        "parbezWorksInvoices"
+      )
+    ) || [];
+
+
+  invoices.push(invoice);
+
+
+  localStorage.setItem(
+    "parbezWorksInvoices",
+    JSON.stringify(invoices)
+  );
+
+
+  alert(
+    "Invoice saved successfully! ✅"
+  );
+
+}
+
+
+// ==========================================
+// WHATSAPP
+// ==========================================
+
+function sendWhatsApp() {
+
+  const invoice =
+    getInvoiceData();
+
+
+  const phone =
+    invoice.customerPhone
+      .replace(/\D/g, "");
+
+
+  if (!phone) {
+
+    alert(
+      "Please enter customer's phone number."
+    );
+
+    return;
+
   }
 
-  main {
-    max-width: 100%;
-    margin: 0;
+
+  let message =
+    "PARBEZ WORKS\n\n";
+
+
+  message +=
+    "Invoice: " +
+    (invoice.invoiceNo || "N/A") +
+    "\n";
+
+
+  message +=
+    "Date: " +
+    (invoice.date || "N/A") +
+    "\n\n";
+
+
+  message +=
+    "Customer: " +
+    (invoice.customerName || "N/A") +
+    "\n";
+
+
+  message +=
+    "Address: " +
+    (invoice.customerAddress || "N/A") +
+    "\n\n";
+
+
+  message +=
+    "WORK DETAILS\n";
+
+
+  invoice.items.forEach(
+    function (item) {
+
+      message +=
+        (item.name || "Item") +
+        " - " +
+        item.qty +
+        " × ₹" +
+        item.rate +
+        " = ₹" +
+        item.amount +
+        "\n";
+
+    }
+  );
+
+
+  message +=
+    "\nSubtotal: ₹" +
+    invoice.subtotal.toFixed(2);
+
+
+  message +=
+    "\nDiscount: ₹" +
+    invoice.discount.toFixed(2);
+
+
+  message +=
+    "\nTotal: ₹" +
+    invoice.total.toFixed(2);
+
+
+  message +=
+    "\nPaid: ₹" +
+    invoice.paid.toFixed(2);
+
+
+  message +=
+    "\nDue: ₹" +
+    invoice.due.toFixed(2);
+
+
+  message +=
+    "\nStatus: " +
+    invoice.paymentStatus;
+
+
+  if (invoice.notes) {
+
+    message +=
+      "\n\nNote: " +
+      invoice.notes;
+
   }
 
-  .card {
-    box-shadow: none;
-    border: 1px solid #ddd;
+
+  const whatsappURL =
+    "https://wa.me/" +
+    phone +
+    "?text=" +
+    encodeURIComponent(
+      message
+    );
+
+
+  window.open(
+    whatsappURL,
+    "_blank"
+  );
+
+}
+
+
+// ==========================================
+// DOWNLOAD BILL AS IMAGE
+// ==========================================
+
+function downloadBillImage() {
+
+  const invoice =
+    getInvoiceData();
+
+
+  if (!invoice.customerName) {
+
+    alert(
+      "Please enter customer name first."
+    );
+
+    return;
+
   }
+
+
+  if (
+    typeof html2canvas ===
+    "undefined"
+  ) {
+
+    alert(
+      "Bill image library is not loaded. Please check your internet connection and refresh the page."
+    );
+
+    return;
+
+  }
+
+
+  const bill =
+    document.createElement(
+      "div"
+    );
+
+
+  bill.style.width =
+    "700px";
+
+  bill.style.padding =
+    "35px";
+
+  bill.style.background =
+    "white";
+
+  bill.style.color =
+    "#111827";
+
+  bill.style.fontFamily =
+    "Arial, sans-serif";
+
+  bill.style.position =
+    "fixed";
+
+  bill.style.left =
+    "-10000px";
+
+  bill.style.top =
+    "0";
+
+
+  let itemsHTML = "";
+
+
+  invoice.items.forEach(
+    function (item) {
+
+      itemsHTML += `
+
+        <tr>
+
+          <td style="
+            padding:10px;
+            border:1px solid #ddd;
+          ">
+            ${item.name || "Item"}
+          </td>
+
+
+          <td style="
+            padding:10px;
+            border:1px solid #ddd;
+            text-align:center;
+          ">
+            ${item.qty}
+          </td>
+
+
+          <td style="
+            padding:10px;
+            border:1px solid #ddd;
+            text-align:right;
+          ">
+            ₹${item.rate.toFixed(2)}
+          </td>
+
+
+          <td style="
+            padding:10px;
+            border:1px solid #ddd;
+            text-align:right;
+          ">
+            ₹${item.amount.toFixed(2)}
+          </td>
+
+        </tr>
+
+      `;
+
+    }
+  );
+
+
+  bill.innerHTML = `
+
+    <div style="
+      text-align:center;
+      border-bottom:3px solid #2563eb;
+      padding-bottom:15px;
+    ">
+
+      <h1 style="
+        margin:0;
+        font-size:32px;
+      ">
+        PARBEZ WORKS
+      </h1>
+
+
+      <p style="
+        margin:5px 0;
+      ">
+        Electrical • False Ceiling • Plumbing
+      </p>
+
+    </div>
+
+
+    <div style="
+      margin-top:20px;
+    ">
+
+      <p>
+        <b>Invoice:</b>
+        ${invoice.invoiceNo || "N/A"}
+      </p>
+
+
+      <p>
+        <b>Date:</b>
+        ${invoice.date || "N/A"}
+      </p>
+
+
+      <p>
+        <b>Customer:</b>
+        ${invoice.customerName}
+      </p>
+
+
+      <p>
+        <b>Phone:</b>
+        ${invoice.customerPhone || "N/A"}
+      </p>
+
+
+      <p>
+        <b>Address:</b>
+        ${invoice.customerAddress || "N/A"}
+      </p>
+
+    </div>
+
+
+    <table style="
+      width:100%;
+      border-collapse:collapse;
+      margin-top:25px;
+    ">
+
+      <thead>
+
+        <tr style="
+          background:#f3f4f6;
+        ">
+
+          <th style="
+            padding:10px;
+            border:1px solid #ddd;
+            text-align:left;
+          ">
+            Work / Item
+          </th>
+
+
+          <th style="
+            padding:10px;
+            border:1px solid #ddd;
+          ">
+            Qty
+          </th>
+
+
+          <th style="
+            padding:10px;
+            border:1px solid #ddd;
+          ">
+            Rate
+          </th>
+
+
+          <th style="
+            padding:10px;
+            border:1px solid #ddd;
+          ">
+            Amount
+          </th>
+
+        </tr>
+
+      </thead>
+
+
+      <tbody>
+
+        ${itemsHTML}
+
+      </tbody>
+
+    </table>
+
+
+    <div style="
+      margin-top:25px;
+      text-align:right;
+      font-size:17px;
+    ">
+
+      <p>
+        Subtotal:
+        <b>₹${invoice.subtotal.toFixed(2)}</b>
+      </p>
+
+
+      <p>
+        Discount:
+        <b>₹${invoice.discount.toFixed(2)}</b>
+      </p>
+
+
+      <h2 style="
+        color:#2563eb;
+      ">
+        Total:
+        ₹${invoice.total.toFixed(2)}
+      </h2>
+
+
+      <p>
+        Paid:
+        <b>₹${invoice.paid.toFixed(2)}</b>
+      </p>
+
+
+      <h2 style="
+        color:#ea580c;
+      ">
+        Due:
+        ₹${invoice.due.toFixed(2)}
+      </h2>
+
+    </div>
+
+
+    <div style="
+      margin-top:30px;
+      border-top:1px solid #ddd;
+      padding-top:15px;
+    ">
+
+      <p>
+        <b>Payment Status:</b>
+        ${invoice.paymentStatus}
+      </p>
+
+
+      ${
+        invoice.notes
+        ? `
+          <p>
+            <b>Note:</b>
+            ${invoice.notes}
+          </p>
+        `
+        : ""
+      }
+
+    </div>
+
+
+    <div style="
+      text-align:center;
+      margin-top:35px;
+      color:#6b7280;
+    ">
+
+      <p>
+        Thank you for choosing Parbez Works
+      </p>
+
+    </div>
+
+  `;
+
+
+  document.body.appendChild(
+    bill
+  );
+
+
+  html2canvas(
+    bill,
+    {
+      scale: 2,
+      backgroundColor: "#ffffff"
+    }
+  )
+  .then(
+    function (canvas) {
+
+      const link =
+        document.createElement(
+          "a"
+        );
+
+
+      link.download =
+        "Parbez-Works-" +
+        (
+          invoice.invoiceNo ||
+          "Bill"
+        ) +
+        ".png";
+
+
+      link.href =
+        canvas.toDataURL(
+          "image/png"
+        );
+
+
+      link.click();
+
+
+      bill.remove();
+
+    }
+  )
+  .catch(
+    function (error) {
+
+      console.error(error);
+
+      bill.remove();
+
+      alert(
+        "Bill image download failed."
+      );
+
+    }
+  );
+
+}
+
+
+// ==========================================
+// CLEAR
+// ==========================================
+
+function clearInvoice() {
+
+  const confirmClear =
+    confirm(
+      "Are you sure you want to clear this invoice?"
+    );
+
+
+  if (!confirmClear) {
+    return;
+  }
+
+
+  document.getElementById(
+    "invoiceNo"
+  ).value = "";
+
+
+  document.getElementById(
+    "customerName"
+  ).value = "";
+
+
+  document.getElementById(
+    "customerPhone"
+  ).value = "";
+
+
+  document.getElementById(
+    "customerAddress"
+  ).value = "";
+
+
+  document.getElementById(
+    "discount"
+  ).value = 0;
+
+
+  document.getElementById(
+    "paid"
+  ).value = 0;
+
+
+  document.getElementById(
+    "paymentStatus"
+  ).value = "Pending";
+
+
+  document.getElementById(
+    "notes"
+  ).value = "";
+
+
+  document.getElementById(
+    "items"
+  ).innerHTML = "";
+
+
+  itemCount = 0;
+
+
+  addItem();
+
+
+  document.getElementById(
+    "date"
+  ).valueAsDate = new Date();
+
+
+  calculateTotal();
+
 }
