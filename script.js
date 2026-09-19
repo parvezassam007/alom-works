@@ -2,10 +2,14 @@ let itemCount = 0;
 
 document.addEventListener("DOMContentLoaded", function () {
 
-// Today's date
+// ==============================
+// TODAY'S DATE
+// ==============================
+
 const dateInput = document.getElementById("date");
 
 if (dateInput) {
+
 const today = new Date();
 
 const yyyy = today.getFullYear();
@@ -16,7 +20,7 @@ dateInput.value = `${yyyy}-${mm}-${dd}`;
 
 }
 
-// First item
+// First item automatically
 const items = document.getElementById("items");
 
 if (items && items.children.length === 0) {
@@ -43,10 +47,12 @@ const item = document.createElement("div");
 item.className = "item";
 
 item.innerHTML = `
+
 <div class="item-grid">
 
   <div>
     <label>Work / Item</label>
+
     <input
       class="item-name"
       type="text"
@@ -54,8 +60,10 @@ item.innerHTML = `
     >
   </div>
 
+
   <div>
     <label>Qty</label>
+
     <input
       class="item-qty"
       type="number"
@@ -65,8 +73,10 @@ item.innerHTML = `
     >
   </div>
 
+
   <div>
     <label>Rate (₹)</label>
+
     <input
       class="item-rate"
       type="number"
@@ -75,6 +85,7 @@ item.innerHTML = `
       oninput="calculateTotal()"
     >
   </div>
+
 
   <button
     type="button"
@@ -86,9 +97,15 @@ item.innerHTML = `
 
 </div>
 
+
 <div style="text-align:right;margin-top:10px;">
+
   Amount:
-  <strong>₹<span class="item-amount">0.00</span></strong>
+
+  <strong>
+    ₹<span class="item-amount">0.00</span>
+  </strong>
+
 </div>
 
 `;
@@ -121,29 +138,49 @@ function calculateTotal() {
 
 let subtotal = 0;
 
-const items = document.querySelectorAll(".item");
+const items =
+document.querySelectorAll(".item");
 
 items.forEach(function (item) {
 
-const qtyInput = item.querySelector(".item-qty");
-const rateInput = item.querySelector(".item-rate");
-const amountElement = item.querySelector(".item-amount");
+const qtyInput =
+  item.querySelector(".item-qty");
 
-const qty = parseFloat(qtyInput?.value) || 0;
-const rate = parseFloat(rateInput?.value) || 0;
+const rateInput =
+  item.querySelector(".item-rate");
 
-const amount = qty * rate;
+const amountElement =
+  item.querySelector(".item-amount");
+
+
+const qty =
+  parseFloat(qtyInput?.value) || 0;
+
+const rate =
+  parseFloat(rateInput?.value) || 0;
+
+
+const amount =
+  qty * rate;
+
 
 if (amountElement) {
-  amountElement.textContent = amount.toFixed(2);
+
+  amountElement.textContent =
+    amount.toFixed(2);
+
 }
+
 
 subtotal += amount;
 
 });
 
-const discountInput = document.getElementById("discount");
-const paidInput = document.getElementById("paid");
+const discountInput =
+document.getElementById("discount");
+
+const paidInput =
+document.getElementById("paid");
 
 const discount =
 parseFloat(discountInput?.value) || 0;
@@ -167,19 +204,26 @@ const dueElement =
 document.getElementById("due");
 
 if (subtotalElement) {
+
 subtotalElement.textContent =
-subtotal.toFixed(2);
+  subtotal.toFixed(2);
+
 }
 
 if (totalElement) {
+
 totalElement.textContent =
-total.toFixed(2);
+  total.toFixed(2);
+
 }
 
 if (dueElement) {
+
 dueElement.textContent =
-due.toFixed(2);
+  due.toFixed(2);
+
 }
+
 }
 
 // ==============================
@@ -227,22 +271,25 @@ items: []
 
 };
 
-document.querySelectorAll(".item").forEach(function (item) {
+document
+.querySelectorAll(".item")
+.forEach(function (item) {
 
-invoice.items.push({
+  invoice.items.push({
 
-  name:
-    item.querySelector(".item-name")?.value || "",
+    name:
+      item.querySelector(".item-name")?.value || "",
 
-  qty:
-    item.querySelector(".item-qty")?.value || "0",
+    qty:
+      item.querySelector(".item-qty")?.value || "0",
 
-  rate:
-    item.querySelector(".item-rate")?.value || "0",
+    rate:
+      item.querySelector(".item-rate")?.value || "0",
 
-  amount:
-    item.querySelector(".item-amount")?.textContent || "0.00"
-});
+    amount:
+      item.querySelector(".item-amount")?.textContent || "0.00"
+
+  });
 
 });
 
@@ -252,10 +299,11 @@ JSON.stringify(invoice)
 );
 
 alert("Invoice saved successfully!");
+
 }
 
 // ==============================
-// DOWNLOAD BILL AS JPG
+// DOWNLOAD BILL JPG
 // ==============================
 
 async function downloadBillJPG() {
@@ -264,8 +312,11 @@ const bill =
 document.getElementById("billArea");
 
 if (!bill) {
+
 alert("Bill area nahi mila.");
+
 return;
+
 }
 
 if (!window.html2canvas) {
@@ -279,14 +330,18 @@ return;
 }
 
 const invoiceNo =
-document.getElementById("invoiceNo")?.value.trim()
-|| "PW-BILL";
+document
+.getElementById("invoiceNo")
+?.value
+.trim() || "PW-BILL";
 
-// Hide buttons during JPG export
+// Hide buttons
 bill.classList.add("export-mode");
 
 await new Promise(function (resolve) {
+
 setTimeout(resolve, 300);
+
 });
 
 try {
@@ -309,6 +364,7 @@ const canvas =
     windowWidth: bill.scrollWidth,
 
     windowHeight: bill.scrollHeight
+
   });
 
 
@@ -324,6 +380,7 @@ const link =
 
 
 link.href = image;
+
 
 link.download =
   `${invoiceNo}-Bill.jpg`;
@@ -342,6 +399,7 @@ console.error(
   error
 );
 
+
 alert(
   "Bill JPG banane mein problem hui."
 );
@@ -353,10 +411,11 @@ bill.classList.remove(
 );
 
 }
+
 }
 
 // ==============================
-// WHATSAPP
+// WHATSAPP DIRECT CUSTOMER NUMBER
 // ==============================
 
 function sendWhatsApp() {
@@ -393,7 +452,7 @@ document
 let cleanPhone =
 phone.replace(/\D/g, "");
 
-// India number
+// Indian 10 digit number
 if (cleanPhone.length === 10) {
 
 cleanPhone =
@@ -401,11 +460,20 @@ cleanPhone =
 
 }
 
-// Check phone number
-if (cleanPhone.length < 11) {
+// Already +91 / 91
+else if (
+cleanPhone.startsWith("91") &&
+cleanPhone.length === 12
+) {
+
+// Keep as it is
+
+}
+
+else {
 
 alert(
-  "Pehle Customer ka valid 10-digit mobile number enter karo."
+  "Customer Phone mein valid 10-digit Indian mobile number enter karo."
 );
 
 return;
@@ -426,16 +494,14 @@ Electrical • False Ceiling • Plumbing
 Thank you for choosing PARBEZ WORKS!`;
 
 // IMPORTANT:
-// Backticks use kiye gaye hain
-// taaki phone aur message actual URL mein aaye.
+// Backticks (`) use kiye gaye hain.
 
 const url =
 "https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}";
 
-window.open(
-url,
-"_blank"
-);
+// Direct WhatsApp link
+window.location.href = url;
+
 }
 
 // ==============================
@@ -477,23 +543,37 @@ document.getElementById("paymentStatus");
 const notes =
 document.getElementById("notes");
 
-if (invoiceNo) invoiceNo.value = "";
+if (invoiceNo) {
+invoiceNo.value = "";
+}
 
-if (customerName) customerName.value = "";
+if (customerName) {
+customerName.value = "";
+}
 
-if (customerPhone) customerPhone.value = "";
+if (customerPhone) {
+customerPhone.value = "";
+}
 
-if (customerAddress) customerAddress.value = "";
+if (customerAddress) {
+customerAddress.value = "";
+}
 
-if (discount) discount.value = "0";
+if (discount) {
+discount.value = "0";
+}
 
-if (paid) paid.value = "0";
+if (paid) {
+paid.value = "0";
+}
 
 if (paymentStatus) {
 paymentStatus.value = "Pending";
 }
 
-if (notes) notes.value = "";
+if (notes) {
+notes.value = "";
+}
 
 // Reset date
 const dateInput =
@@ -504,13 +584,16 @@ if (dateInput) {
 const today =
   new Date();
 
+
 const yyyy =
   today.getFullYear();
+
 
 const mm =
   String(
     today.getMonth() + 1
   ).padStart(2, "0");
+
 
 const dd =
   String(
@@ -537,9 +620,11 @@ addItem();
 
 }
 
+// Delete saved invoice
 localStorage.removeItem(
 "parbezWorksInvoice"
 );
 
 calculateTotal();
-    }
+
+  }
