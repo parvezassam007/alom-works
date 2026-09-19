@@ -1,373 +1,621 @@
-let itemCount = 0;
-
-document.addEventListener("DOMContentLoaded", function () {
-
-// Today's date
-const dateInput = document.getElementById("date");
-
-if (dateInput) {
-const today = new Date();
-const yyyy = today.getFullYear();
-const mm = String(today.getMonth() + 1).padStart(2, "0");
-const dd = String(today.getDate()).padStart(2, "0");
-
-dateInput.value = `${yyyy}-${mm}-${dd}`;
-
+:root {
+--primary-blue: #003b8f;
+--secondary-blue: #0066d6;
+--bright-blue: #1683ff;
+--light-blue: #eaf2ff;
+--soft-blue: #f5f9ff;
+--dark-text: #172033;
+--muted-text: #64748b;
+--white: #ffffff;
+--border: #cfe0ff;
+--green: #0b8f55;
+--red: #e53935;
 }
 
-// First item automatically
-addItem();
-});
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  }
 
-// ==============================
-// ADD ITEM
-// ==============================
-
-function addItem() {
-
-itemCount++;
-
-const items = document.getElementById("items");
-
-const item = document.createElement("div");
-
-item.className = "item";
-
-item.innerHTML = `
-<div class="item-grid">
-
-  <div>
-    <label>Work / Item</label>
-    <input
-      class="item-name"
-      placeholder="Example: Fan installation"
-    >
-  </div>
-
-  <div>
-    <label>Qty</label>
-    <input
-      class="item-qty"
-      type="number"
-      value="1"
-      min="0"
-      oninput="calculateTotal()"
-    >
-  </div>
-
-  <div>
-    <label>Rate (₹)</label>
-    <input
-      class="item-rate"
-      type="number"
-      value="0"
-      min="0"
-      oninput="calculateTotal()"
-    >
-  </div>
-
-  <button
-    type="button"
-    class="remove-btn no-print"
-    onclick="removeItem(this)"
-  >
-    ✕
-  </button>
-
-</div>
-
-<div style="text-align:right;margin-top:10px;">
-  Amount:
-  <strong>₹<span class="item-amount">0.00</span></strong>
-</div>
-
-`;
-
-items.appendChild(item);
-
-calculateTotal();
+body {
+font-family: "Poppins", Arial, sans-serif;
+background: var(--light-blue);
+color: var(--dark-text);
+line-height: 1.6;
 }
 
-// ==============================
-// REMOVE ITEM
-// ==============================
+/* ================================
+MAIN WEBSITE
+================================ */
 
-function removeItem(button) {
-
-const item = button.closest(".item");
-
-if (item) {
-item.remove();
+#billArea {
+max-width: 1100px;
+margin: 20px auto;
+background: var(--white);
+min-height: 100vh;
+border-radius: 18px;
+overflow: hidden;
+box-shadow: 0 10px 35px rgba(30, 64, 175, 0.15);
 }
 
-calculateTotal();
-}
+/* ================================
+HEADER
+================================ */
 
-// ==============================
-// CALCULATE TOTAL
-// ==============================
-
-function calculateTotal() {
-
-let subtotal = 0;
-
-const items = document.querySelectorAll(".item");
-
-items.forEach(function (item) {
-
-const qty =
-  parseFloat(item.querySelector(".item-qty").value) || 0;
-
-const rate =
-  parseFloat(item.querySelector(".item-rate").value) || 0;
-
-const amount = qty * rate;
-
-item.querySelector(".item-amount").textContent =
-  amount.toFixed(2);
-
-subtotal += amount;
-
-});
-
-const discount =
-parseFloat(document.getElementById("discount").value) || 0;
-
-const paid =
-parseFloat(document.getElementById("paid").value) || 0;
-
-const total = Math.max(0, subtotal - discount);
-
-const due = Math.max(0, total - paid);
-
-document.getElementById("subtotal").textContent =
-subtotal.toFixed(2);
-
-document.getElementById("total").textContent =
-total.toFixed(2);
-
-document.getElementById("due").textContent =
-due.toFixed(2);
-}
-
-// ==============================
-// SAVE INVOICE
-// ==============================
-
-function saveInvoice() {
-
-const invoice = {
-
-invoiceNo:
-  document.getElementById("invoiceNo").value,
-
-date:
-  document.getElementById("date").value,
-
-customerName:
-  document.getElementById("customerName").value,
-
-customerPhone:
-  document.getElementById("customerPhone").value,
-
-customerAddress:
-  document.getElementById("customerAddress").value,
-
-discount:
-  document.getElementById("discount").value,
-
-paid:
-  document.getElementById("paid").value,
-
-paymentStatus:
-  document.getElementById("paymentStatus").value,
-
-notes:
-  document.getElementById("notes").value,
-
-total:
-  document.getElementById("total").textContent,
-
-due:
-  document.getElementById("due").textContent,
-
-items: []
-
-};
-
-document.querySelectorAll(".item").forEach(function (item) {
-
-invoice.items.push({
-
-  name:
-    item.querySelector(".item-name").value,
-
-  qty:
-    item.querySelector(".item-qty").value,
-
-  rate:
-    item.querySelector(".item-rate").value,
-
-  amount:
-    item.querySelector(".item-amount").textContent
-
-});
-
-});
-
-localStorage.setItem(
-"parbezWorksInvoice",
-JSON.stringify(invoice)
+.main-header {
+background: linear-gradient(
+135deg,
+var(--primary-blue),
+var(--secondary-blue),
+var(--bright-blue)
 );
-
-alert("Invoice saved successfully!");
+color: white;
+padding: 28px 25px;
 }
 
-// ==============================
-// DOWNLOAD BILL AS JPG
-// ==============================
-
-async function downloadBillJPG() {
-
-const bill = document.getElementById("billArea");
-
-if (!window.html2canvas) {
-alert("JPG feature load nahi hua. Internet ON karke page reload karo.");
-return;
+.header-content {
+display: flex;
+justify-content: space-between;
+align-items: center;
+gap: 20px;
 }
 
-const oldTitle = document.title;
+.logo {
+display: flex;
+align-items: center;
+gap: 12px;
+}
 
-const invoiceNo =
-document.getElementById("invoiceNo").value.trim() || "PW-BILL";
+.logo i {
+font-size: 32px;
+color: #facc15;
+}
 
-// Buttons temporarily hide
-bill.classList.add("export-mode");
+.logo h1 {
+font-size: 30px;
+letter-spacing: 1px;
+line-height: 1.2;
+}
 
-// Wait for rendering
-await new Promise(resolve => setTimeout(resolve, 300));
+.logo p {
+margin-top: 5px;
+font-size: 14px;
+opacity: 0.95;
+}
 
-try {
+.print-btn {
+background: white;
+color: var(--secondary-blue);
+border: none;
+padding: 12px 18px;
+border-radius: 9px;
+font-weight: 700;
+cursor: pointer;
+}
 
-const canvas = await html2canvas(bill, {
+.print-btn:hover {
+transform: translateY(-2px);
+}
 
-  scale: 2,
+/* ================================
+SERVICES
+================================ */
 
-  useCORS: true,
-
-  backgroundColor: "#ffffff",
-
-  scrollX: 0,
-
-  scrollY: -window.scrollY,
-
-  windowWidth: bill.scrollWidth,
-
-  windowHeight: bill.scrollHeight
-
-});
-
-
-const image = canvas.toDataURL(
-  "image/jpeg",
-  0.95
+.services-section {
+padding: 42px 25px;
+background: linear-gradient(
+180deg,
+#f8fbff,
+#eaf2ff
 );
+}
 
+.services-container {
+max-width: 1050px;
+margin: auto;
+}
 
-const link = document.createElement("a");
+.services-title {
+text-align: center;
+color: var(--primary-blue);
+font-size: 28px;
+font-weight: 700;
+}
 
-link.href = image;
+.services-subtitle {
+text-align: center;
+color: var(--muted-text);
+font-size: 14px;
+margin-top: 5px;
+margin-bottom: 28px;
+}
 
-link.download = `${invoiceNo}-Bill.jpg`;
+.services-grid {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 22px;
+}
 
-document.body.appendChild(link);
+/* SERVICE CARD */
 
-link.click();
+.service-card {
+background: white;
+border-radius: 15px;
+overflow: hidden;
+border: 1px solid var(--border);
+box-shadow: 0 5px 18px rgba(0, 76, 153, 0.09);
+transition: 0.3s ease;
+}
 
-document.body.removeChild(link);
+.service-card:hover {
+transform: translateY(-6px);
+box-shadow: 0 15px 30px rgba(0, 76, 153, 0.18);
+border-color: var(--bright-blue);
+}
 
-} catch (error) {
+/* SERVICE IMAGE */
 
-console.error(error);
+.service-image {
+width: 100%;
+height: 200px;
+overflow: hidden;
+background: #dbeafe;
+}
 
-alert("Bill JPG banane mein problem hui.");
+.service-image img {
+width: 100%;
+height: 100%;
+object-fit: cover;
+display: block;
+transition: transform 0.4s ease;
+}
 
-} finally {
+.service-card:hover .service-image img {
+transform: scale(1.07);
+}
 
-bill.classList.remove("export-mode");
+/* SERVICE CONTENT */
 
-document.title = oldTitle;
+.service-content {
+padding: 18px;
+}
 
+.service-content h3 {
+color: var(--primary-blue);
+font-size: 19px;
+margin-bottom: 7px;
+}
+
+.service-content p {
+color: #475569;
+font-size: 13px;
+line-height: 1.6;
+}
+
+/* ================================
+BILLING MAIN
+================================ */
+
+main {
+padding: 25px;
+background: white;
+}
+
+.card {
+background: white;
+border: 1px solid var(--border);
+border-left: 5px solid var(--secondary-blue);
+border-radius: 14px;
+padding: 20px;
+margin-bottom: 18px;
+box-shadow: 0 4px 15px rgba(0, 76, 153, 0.07);
+}
+
+.card h2 {
+margin-bottom: 15px;
+color: var(--secondary-blue);
+font-size: 20px;
+}
+
+/* ================================
+INPUTS
+================================ */
+
+label {
+display: block;
+margin: 12px 0 6px;
+font-size: 14px;
+font-weight: 600;
+color: #28476b;
+}
+
+input,
+textarea,
+select {
+width: 100%;
+padding: 12px;
+border: 2px solid #d5e5ff;
+border-radius: 8px;
+background: #f8fbff;
+color: var(--dark-text);
+font-family: inherit;
+font-size: 14px;
+outline: none;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+border-color: var(--bright-blue);
+background: white;
+box-shadow: 0 0 0 3px rgba(22, 131, 255, 0.12);
+}
+
+textarea {
+min-height: 80px;
+resize: vertical;
+}
+
+/* ================================
+INVOICE GRID
+================================ */
+
+.grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 15px;
+}
+
+/* ================================
+ITEM SECTION
+================================ */
+
+.section-title {
+display: flex;
+justify-content: space-between;
+align-items: center;
+gap: 10px;
+}
+
+.add-btn {
+background: linear-gradient(
+135deg,
+var(--secondary-blue),
+var(--bright-blue)
+);
+color: white;
+border: none;
+padding: 11px 17px;
+border-radius: 8px;
+font-weight: 700;
+cursor: pointer;
+}
+
+.add-btn:hover {
+transform: translateY(-2px);
+}
+
+/* ================================
+ITEM ROW
+================================ */
+
+.item {
+background: var(--soft-blue);
+border: 2px solid var(--border);
+padding: 15px;
+border-radius: 11px;
+margin-bottom: 12px;
+}
+
+.item-grid {
+display: grid;
+grid-template-columns: 2fr 1fr 1fr auto;
+gap: 10px;
+align-items: end;
+}
+
+/* ================================
+TABLE
+================================ */
+
+.table-responsive {
+width: 100%;
+overflow-x: auto;
+}
+
+.items-table {
+width: 100%;
+border-collapse: collapse;
+min-width: 650px;
+}
+
+.items-table th {
+background: var(--light-blue);
+color: var(--primary-blue);
+padding: 11px;
+text-align: left;
+font-size: 13px;
+}
+
+.items-table td {
+padding: 9px;
+border-bottom: 1px solid var(--border);
+}
+
+.items-table input {
+padding: 8px;
+}
+
+/* ================================
+REMOVE BUTTON
+================================ */
+
+.btn-remove {
+background: #fee2e2;
+color: var(--red);
+border: none;
+padding: 8px 11px;
+border-radius: 6px;
+cursor: pointer;
+}
+
+.btn-remove:hover {
+background: #fecaca;
+}
+
+/* ================================
+TOTALS
+================================ */
+
+.totals {
+background: linear-gradient(
+135deg,
+#eef6ff,
+#ffffff
+);
+}
+
+.totals > div {
+display: flex;
+justify-content: space-between;
+align-items: center;
+gap: 20px;
+padding: 9px 5px;
+}
+
+.totals strong {
+color: var(--secondary-blue);
+}
+
+.totals input {
+max-width: 180px;
+background: white;
+}
+
+.grand {
+margin-top: 8px;
+padding: 15px 5px !important;
+border-top: 2px solid var(--bright-blue);
+border-bottom: 2px solid var(--bright-blue);
+font-size: 20px;
+}
+
+.grand strong {
+color: var(--secondary-blue);
+font-size: 24px;
+}
+
+.due {
+color: var(--red);
+font-size: 17px;
+}
+
+.due strong {
+color: var(--red);
+}
+
+/* ================================
+ACTION BUTTONS
+================================ */
+
+.actions {
+display: flex;
+gap: 10px;
+flex-wrap: wrap;
+margin: 22px 0;
+justify-content: center;
+}
+
+.actions button {
+border: none;
+padding: 13px 18px;
+border-radius: 9px;
+color: white;
+cursor: pointer;
+font-weight: 700;
+font-size: 14px;
+transition: 0.2s;
+}
+
+.actions button:hover {
+transform: translateY(-2px);
+opacity: 0.92;
+}
+
+.save-btn {
+background: var(--secondary-blue);
+}
+
+.jpg-btn {
+background: var(--primary-blue);
+}
+
+.whatsapp-btn {
+background: var(--green);
+}
+
+.clear-btn {
+background: var(--red);
+}
+
+/* ================================
+FOOTER
+================================ */
+
+footer {
+text-align: center;
+padding: 25px;
+background: linear-gradient(
+135deg,
+#002b6b,
+var(--primary-blue)
+);
+color: white;
+}
+
+footer h3 {
+font-size: 19px;
+margin-bottom: 5px;
+}
+
+footer p {
+font-size: 13px;
+margin: 4px;
+opacity: 0.9;
+}
+
+/* ================================
+JPG / PRINT
+================================ */
+
+.no-print {
+/* hidden during print/JPG by JavaScript */
+}
+
+@media print {
+
+body {
+background: white;
+}
+
+#billArea {
+max-width: none;
+margin: 0;
+border-radius: 0;
+box-shadow: none;
+}
+
+.no-print {
+display: none !important;
+}
+
+.services-section {
+display: none;
+}
+
+.card {
+box-shadow: none;
+break-inside: avoid;
 }
 }
 
-// ==============================
-// WHATSAPP
-// ==============================
+/* ================================
+MOBILE
+================================ */
 
-function sendWhatsApp() {
+@media (max-width: 700px) {
 
-const phone =
-document.getElementById("customerPhone").value.trim();
-
-const name =
-document.getElementById("customerName").value.trim();
-
-const invoiceNo =
-document.getElementById("invoiceNo").value.trim();
-
-const total =
-document.getElementById("total").textContent;
-
-const due =
-document.getElementById("due").textContent;
-
-let message =
-`PARBEZ WORKS
-
-Invoice: ${invoiceNo || "N/A"}
-Customer: ${name || "N/A"}
-
-Total: ₹${total}
-Due: ₹${due}
-
-Electrical • False Ceiling • Plumbing`;
-
-let cleanPhone = phone.replace(/\D/g, "");
-
-if (cleanPhone.length === 10) {
-cleanPhone = "91" + cleanPhone;
+body {
+background: var(--light-blue);
 }
 
-const url =
-"https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}";
-
-window.open(url, "_blank");
+#billArea {
+margin: 0;
+border-radius: 0;
 }
 
-// ==============================
-// CLEAR
-// ==============================
-
-function clearInvoice() {
-
-const confirmClear =
-confirm("Kya aap poora invoice clear karna chahte hain?");
-
-if (!confirmClear) return;
-
-document.getElementById("invoiceNo").value = "";
-document.getElementById("customerName").value = "";
-document.getElementById("customerPhone").value = "";
-document.getElementById("customerAddress").value = "";
-document.getElementById("discount").value = "0";
-document.getElementById("paid").value = "0";
-document.getElementById("paymentStatus").value = "Pending";
-document.getElementById("notes").value = "";
-
-document.getElementById("items").innerHTML = "";
-
-addItem();
-
-calculateTotal();
+.main-header {
+padding: 22px 15px;
 }
+
+.header-content {
+flex-direction: column;
+align-items: stretch;
+text-align: center;
+}
+
+.logo {
+justify-content: center;
+}
+
+.logo h1 {
+font-size: 25px;
+}
+
+.logo i {
+font-size: 27px;
+}
+
+.print-btn {
+width: 100%;
+}
+
+.services-section {
+padding: 30px 13px;
+}
+
+.services-title {
+font-size: 24px;
+}
+
+.services-grid {
+grid-template-columns: 1fr;
+gap: 18px;
+}
+
+.service-image {
+height: 210px;
+}
+
+main {
+padding: 13px;
+}
+
+.card {
+padding: 16px;
+}
+
+.grid {
+grid-template-columns: 1fr;
+}
+
+.section-title {
+flex-direction: column;
+align-items: stretch;
+}
+
+.add-btn {
+width: 100%;
+}
+
+.totals > div {
+flex-wrap: wrap;
+}
+
+.totals input {
+max-width: 100%;
+}
+
+.actions {
+flex-direction: column;
+}
+
+.actions button {
+width: 100%;
+}
+
+footer {
+padding: 20px 10px;
+}
+  }
