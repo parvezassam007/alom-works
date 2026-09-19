@@ -1,482 +1,392 @@
-// PARBEZ WORKS BILLING SYSTEM
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-let itemCount = 0;
-
-// Wait until the HTML page is fully loaded
-document.addEventListener("DOMContentLoaded", function () {
-
-  // Set today's date
-  const dateInput = document.getElementById("date");
-
-  if (dateInput) {
-    dateInput.valueAsDate = new Date();
-  }
-
-  // Add first item
-  addItem();
-
-  calculateTotal();
-});
-
-
-// ==============================
-// ADD ITEM
-// ==============================
-
-function addItem() {
-
-  itemCount++;
-
-  const itemsContainer = document.getElementById("items");
-
-  if (!itemsContainer) {
-    alert("Error: Items section not found.");
-    return;
-  }
-
-  const item = document.createElement("div");
-
-  item.className = "item";
-  item.id = "item-" + itemCount;
-
-  item.innerHTML = `
-    <div class="item-grid">
-
-      <div>
-        <label>Work / Item</label>
-        <input
-          type="text"
-          class="item-name"
-          placeholder="e.g. Electrical Point"
-        >
-      </div>
-
-      <div>
-        <label>Qty</label>
-        <input
-          type="number"
-          class="item-qty"
-          value="1"
-          min="0"
-        >
-      </div>
-
-      <div>
-        <label>Rate (₹)</label>
-        <input
-          type="number"
-          class="item-rate"
-          value="0"
-          min="0"
-        >
-      </div>
-
-    </div>
-
-    <button
-      type="button"
-      class="remove-btn"
-      onclick="removeItem(${itemCount})"
-    >
-      Remove
-    </button>
-  `;
-
-  itemsContainer.appendChild(item);
-
-  // Calculate when quantity/rate changes
-  const qty = item.querySelector(".item-qty");
-  const rate = item.querySelector(".item-rate");
-
-  qty.addEventListener("input", calculateTotal);
-  rate.addEventListener("input", calculateTotal);
-
-  calculateTotal();
+body {
+  font-family: Arial, sans-serif;
+  background: #f3f4f6;
+  color: #1f2937;
+  line-height: 1.5;
 }
 
 
-// ==============================
-// REMOVE ITEM
-// ==============================
+/* HEADER */
 
-function removeItem(id) {
+header {
+  background: linear-gradient(135deg, #111827, #2563eb);
+  color: white;
 
-  const item = document.getElementById("item-" + id);
+  padding: 22px 16px;
 
-  if (item) {
-    item.remove();
-    calculateTotal();
-  }
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 15px;
+}
+
+header h1 {
+  font-size: 26px;
+  letter-spacing: 1px;
+}
+
+header p {
+  font-size: 13px;
+  opacity: 0.9;
+  margin-top: 3px;
 }
 
 
-// ==============================
-// CALCULATE TOTAL
-// ==============================
+/* BUTTON */
 
-function calculateTotal() {
+button {
+  cursor: pointer;
+  border: none;
+  font-weight: bold;
+}
 
-  let subtotal = 0;
+.print-btn {
+  background: white;
+  color: #1d4ed8;
 
-  const items = document.querySelectorAll(".item");
+  padding: 10px 14px;
 
-  items.forEach(function (item) {
-
-    const qtyInput = item.querySelector(".item-qty");
-    const rateInput = item.querySelector(".item-rate");
-
-    const qty = parseFloat(qtyInput.value) || 0;
-    const rate = parseFloat(rateInput.value) || 0;
-
-    subtotal += qty * rate;
-  });
-
-
-  const discountInput = document.getElementById("discount");
-  const paidInput = document.getElementById("paid");
-
-  const discount =
-    parseFloat(discountInput?.value) || 0;
-
-  const paid =
-    parseFloat(paidInput?.value) || 0;
-
-
-  const total = Math.max(0, subtotal - discount);
-
-  const due = Math.max(0, total - paid);
-
-
-  const subtotalElement =
-    document.getElementById("subtotal");
-
-  const totalElement =
-    document.getElementById("total");
-
-  const dueElement =
-    document.getElementById("due");
-
-
-  if (subtotalElement) {
-    subtotalElement.textContent =
-      subtotal.toFixed(2);
-  }
-
-  if (totalElement) {
-    totalElement.textContent =
-      total.toFixed(2);
-  }
-
-  if (dueElement) {
-    dueElement.textContent =
-      due.toFixed(2);
-  }
+  border-radius: 8px;
 }
 
 
-// ==============================
-// GET INVOICE DATA
-// ==============================
+/* MAIN */
 
-function getInvoiceData() {
+main {
+  width: 100%;
+  max-width: 850px;
 
-  const items = [];
+  margin: 20px auto;
 
-  document.querySelectorAll(".item").forEach(function (item) {
-
-    const name =
-      item.querySelector(".item-name").value.trim();
-
-    const qty =
-      parseFloat(
-        item.querySelector(".item-qty").value
-      ) || 0;
-
-    const rate =
-      parseFloat(
-        item.querySelector(".item-rate").value
-      ) || 0;
-
-
-    items.push({
-      name: name,
-      qty: qty,
-      rate: rate,
-      amount: qty * rate
-    });
-
-  });
-
-
-  return {
-
-    invoiceNo:
-      document.getElementById("invoiceNo")?.value || "",
-
-    date:
-      document.getElementById("date")?.value || "",
-
-    customerName:
-      document.getElementById("customerName")?.value || "",
-
-    customerPhone:
-      document.getElementById("customerPhone")?.value || "",
-
-    customerAddress:
-      document.getElementById("customerAddress")?.value || "",
-
-    items: items,
-
-    subtotal:
-      parseFloat(
-        document.getElementById("subtotal")?.textContent
-      ) || 0,
-
-    discount:
-      parseFloat(
-        document.getElementById("discount")?.value
-      ) || 0,
-
-    total:
-      parseFloat(
-        document.getElementById("total")?.textContent
-      ) || 0,
-
-    paid:
-      parseFloat(
-        document.getElementById("paid")?.value
-      ) || 0,
-
-    due:
-      parseFloat(
-        document.getElementById("due")?.textContent
-      ) || 0,
-
-    paymentStatus:
-      document.getElementById("paymentStatus")?.value ||
-      "Pending",
-
-    notes:
-      document.getElementById("notes")?.value || ""
-  };
+  padding: 0 14px;
 }
 
 
-// ==============================
-// SAVE INVOICE
-// ==============================
+/* CARD */
 
-function saveInvoice() {
+.card {
+  background: white;
 
-  const invoice = getInvoiceData();
+  padding: 20px;
 
-  let invoices =
-    JSON.parse(
-      localStorage.getItem("parbezWorksInvoices")
-    ) || [];
+  margin-bottom: 16px;
 
+  border-radius: 14px;
 
-  invoices.push(invoice);
+  box-shadow:
+    0 3px 12px rgba(0, 0, 0, 0.08);
+}
 
+.card h2 {
+  font-size: 19px;
 
-  localStorage.setItem(
-    "parbezWorksInvoices",
-    JSON.stringify(invoices)
-  );
+  margin-bottom: 16px;
 
-
-  alert("Invoice saved successfully! ✅");
+  color: #111827;
 }
 
 
-// ==============================
-// WHATSAPP
-// ==============================
+/* INPUT GRID */
 
-function sendWhatsApp() {
+.grid {
+  display: grid;
 
-  const invoice = getInvoiceData();
+  grid-template-columns:
+    1fr 1fr;
 
-  const phone =
-    invoice.customerPhone.replace(/\D/g, "");
-
-
-  if (!phone) {
-
-    alert(
-      "Please enter customer's phone number."
-    );
-
-    return;
-  }
-
-
-  let message =
-    "PARBEZ WORKS\n\n";
-
-
-  message +=
-    "Invoice: " +
-    (invoice.invoiceNo || "N/A") +
-    "\n";
-
-
-  message +=
-    "Date: " +
-    (invoice.date || "N/A") +
-    "\n\n";
-
-
-  message +=
-    "Customer: " +
-    (invoice.customerName || "N/A") +
-    "\n";
-
-
-  message +=
-    "Address: " +
-    (invoice.customerAddress || "N/A") +
-    "\n\n";
-
-
-  message +=
-    "WORK DETAILS\n";
-
-
-  invoice.items.forEach(function (item) {
-
-    message +=
-      (item.name || "Item") +
-      " - " +
-      item.qty +
-      " × ₹" +
-      item.rate +
-      " = ₹" +
-      item.amount +
-      "\n";
-
-  });
-
-
-  message +=
-    "\nSubtotal: ₹" +
-    invoice.subtotal.toFixed(2);
-
-
-  message +=
-    "\nDiscount: ₹" +
-    invoice.discount.toFixed(2);
-
-
-  message +=
-    "\nTotal: ₹" +
-    invoice.total.toFixed(2);
-
-
-  message +=
-    "\nPaid: ₹" +
-    invoice.paid.toFixed(2);
-
-
-  message +=
-    "\nDue: ₹" +
-    invoice.due.toFixed(2);
-
-
-  message +=
-    "\nStatus: " +
-    invoice.paymentStatus;
-
-
-  if (invoice.notes) {
-
-    message +=
-      "\n\nNote: " +
-      invoice.notes;
-  }
-
-
-  const whatsappURL =
-    "https://wa.me/" +
-    phone +
-    "?text=" +
-    encodeURIComponent(message);
-
-
-  window.open(
-    whatsappURL,
-    "_blank"
-  );
+  gap: 15px;
 }
 
 
-// ==============================
-// CLEAR INVOICE
-// ==============================
+/* INPUTS */
 
-function clearInvoice() {
+label {
+  display: block;
 
-  const confirmClear =
-    confirm(
-      "Are you sure you want to clear this invoice?"
-    );
+  font-size: 14px;
+
+  font-weight: bold;
+
+  margin: 10px 0 6px;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+
+  padding: 12px;
+
+  border: 1px solid #d1d5db;
+
+  border-radius: 8px;
+
+  font-size: 15px;
+
+  outline: none;
+
+  background: white;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #2563eb;
+}
+
+textarea {
+  min-height: 80px;
+
+  resize: vertical;
+}
 
 
-  if (!confirmClear) {
-    return;
+/* SECTION TITLE */
+
+.section-title {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 10px;
+}
+
+.section-title h2 {
+  margin-bottom: 0;
+}
+
+
+/* ADD ITEM */
+
+.add-btn {
+  background: #16a34a;
+
+  color: white;
+
+  padding: 10px 14px;
+
+  border-radius: 8px;
+}
+
+
+/* ITEM */
+
+.item {
+  border: 1px solid #e5e7eb;
+
+  padding: 14px;
+
+  border-radius: 10px;
+
+  margin-bottom: 12px;
+
+  background: #f9fafb;
+}
+
+.item-grid {
+  display: grid;
+
+  grid-template-columns:
+    2fr 1fr 1fr;
+
+  gap: 10px;
+}
+
+
+/* REMOVE */
+
+.remove-btn {
+  margin-top: 10px;
+
+  background: #dc2626;
+
+  color: white;
+
+  padding: 8px 12px;
+
+  border-radius: 7px;
+}
+
+
+/* TOTALS */
+
+.totals {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+}
+
+.totals > div {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 15px;
+}
+
+.totals input {
+  max-width: 180px;
+}
+
+
+/* GRAND TOTAL */
+
+.grand {
+  border-top: 1px solid #e5e7eb;
+
+  padding-top: 14px;
+
+  font-size: 20px;
+}
+
+.grand strong {
+  color: #2563eb;
+}
+
+
+/* DUE */
+
+.due {
+  background: #fff7ed;
+
+  padding: 12px;
+
+  border-radius: 8px;
+}
+
+.due strong {
+  color: #ea580c;
+}
+
+
+/* ACTION BUTTONS */
+
+.actions {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, 1fr);
+
+  gap: 10px;
+
+  margin-bottom: 25px;
+}
+
+.actions button {
+  padding: 13px;
+
+  border-radius: 9px;
+
+  color: white;
+
+  font-size: 14px;
+}
+
+.save-btn {
+  background: #2563eb;
+}
+
+.whatsapp-btn {
+  background: #16a34a;
+}
+
+.download-btn {
+  background: #7c3aed;
+}
+
+.clear-btn {
+  background: #dc2626;
+}
+
+
+/* FOOTER */
+
+footer {
+  text-align: center;
+
+  padding: 25px 15px;
+
+  color: #6b7280;
+
+  font-size: 13px;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+  header {
+    flex-direction: column;
+
+    text-align: center;
+
+    align-items: stretch;
   }
 
-
-  const fields = [
-    "invoiceNo",
-    "customerName",
-    "customerPhone",
-    "customerAddress",
-    "discount",
-    "paid",
-    "notes"
-  ];
-
-
-  fields.forEach(function (id) {
-
-    const element =
-      document.getElementById(id);
-
-    if (element) {
-      element.value = "";
-    }
-
-  });
-
-
-  document.getElementById("discount").value = 0;
-
-  document.getElementById("paid").value = 0;
-
-
-  const status =
-    document.getElementById("paymentStatus");
-
-  if (status) {
-    status.value = "Pending";
+  header button {
+    width: 100%;
   }
 
-
-  document.getElementById("items").innerHTML = "";
-
-  itemCount = 0;
-
-  addItem();
-
-
-  const date =
-    document.getElementById("date");
-
-  if (date) {
-    date.valueAsDate = new Date();
+  .grid,
+  .item-grid,
+  .actions {
+    grid-template-columns: 1fr;
   }
 
+  .card {
+    padding: 16px;
+  }
 
-  calculateTotal();
+  .totals > div {
+    flex-wrap: wrap;
+  }
+
+  .totals input {
+    max-width: 100%;
+  }
+
+}
+
+
+/* PRINT */
+
+@media print {
+
+  body {
+    background: white;
+  }
+
+  header button,
+  .actions,
+  .add-btn,
+  .remove-btn {
+    display: none !important;
+  }
+
+  main {
+    max-width: 100%;
+
+    margin: 0;
+  }
+
+  .card {
+    box-shadow: none;
+
+    border: 1px solid #ddd;
+  }
+
 }
