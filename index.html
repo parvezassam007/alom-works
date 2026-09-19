@@ -4,233 +4,395 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Parbez Works | Billing</title>
+  <title>Parbez Works</title>
 
   <link rel="stylesheet" href="style.css">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 
 <body>
 
-<header>
-  <div>
-    <h1>PARBEZ WORKS</h1>
-    <p>Electrical • False Ceiling • Plumbing</p>
-  </div>
+  <header class="topbar">
 
-  <button class="print-btn" onclick="window.print()">
-    🖨️ Print / PDF
-  </button>
-</header>
-
-
-<main>
-
-  <!-- Invoice Details -->
-  <section class="card">
-
-    <h2>Invoice Details</h2>
-
-    <div class="grid">
+    <div class="brand">
+      <div class="logo">PW</div>
 
       <div>
-        <label>Invoice No.</label>
-        <input id="invoiceNo" placeholder="PW-001">
+        <h1>Parbez Works</h1>
+        <p>Electrical • Ceiling • Plumbing</p>
       </div>
-
-      <div>
-        <label>Date</label>
-        <input id="date" type="date">
-      </div>
-
     </div>
 
-  </section>
+    <button class="print-btn" onclick="window.print()">
+      🖨️
+    </button>
+
+  </header>
 
 
-  <!-- Customer Details -->
-  <section class="card">
+  <main>
 
-    <h2>Customer Details</h2>
+    <!-- DASHBOARD -->
 
-    <label>Customer Name</label>
-    <input
-      id="customerName"
-      type="text"
-      placeholder="Enter customer name"
-    >
+    <section class="welcome">
 
-    <label>Phone Number</label>
-    <input
-      id="customerPhone"
-      type="tel"
-      placeholder="Enter phone number"
-    >
+      <div>
+        <p class="small-title">BILLING DASHBOARD</p>
 
-    <label>Address</label>
-    <textarea
-      id="customerAddress"
-      placeholder="Enter customer address"
-    ></textarea>
+        <h2>Create your invoice</h2>
 
-  </section>
+        <p class="welcome-text">
+          Make a professional bill for your customer.
+        </p>
+      </div>
+
+      <div class="welcome-icon">
+        🧾
+      </div>
+
+    </section>
 
 
-  <!-- Work / Items -->
-  <section class="card">
+    <!-- INVOICE NUMBER -->
 
-    <div class="section-title">
+    <section class="card">
 
-      <h2>Work / Items</h2>
+      <div class="section-heading">
+        <div class="heading-icon">🧾</div>
+
+        <div>
+          <h2>Invoice Details</h2>
+          <p>Basic invoice information</p>
+        </div>
+      </div>
+
+
+      <div class="grid">
+
+        <div class="input-group">
+
+          <label>Invoice Number</label>
+
+          <input
+            id="invoiceNo"
+            placeholder="PW-001"
+          >
+
+        </div>
+
+
+        <div class="input-group">
+
+          <label>Date</label>
+
+          <input
+            id="date"
+            type="date"
+          >
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- CUSTOMER -->
+
+    <section class="card">
+
+      <div class="section-heading">
+
+        <div class="heading-icon">
+          👤
+        </div>
+
+        <div>
+          <h2>Customer</h2>
+          <p>Customer information</p>
+        </div>
+
+      </div>
+
+
+      <div class="input-group">
+
+        <label>Customer Name</label>
+
+        <input
+          id="customerName"
+          placeholder="Enter customer name"
+        >
+
+      </div>
+
+
+      <div class="grid">
+
+        <div class="input-group">
+
+          <label>Phone</label>
+
+          <input
+            id="customerPhone"
+            type="tel"
+            placeholder="10 digit number"
+          >
+
+        </div>
+
+
+        <div class="input-group">
+
+          <label>Address</label>
+
+          <input
+            id="customerAddress"
+            placeholder="Customer address"
+          >
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ITEMS -->
+
+    <section class="card">
+
+      <div class="section-heading item-heading">
+
+        <div class="section-left">
+
+          <div class="heading-icon">
+            🛠️
+          </div>
+
+          <div>
+            <h2>Work / Items</h2>
+            <p>Add your work and rates</p>
+          </div>
+
+        </div>
+
+
+        <button
+          class="add-btn"
+          onclick="addItem()"
+        >
+          + Add
+        </button>
+
+      </div>
+
+
+      <div id="items"></div>
+
+    </section>
+
+
+    <!-- BILL SUMMARY -->
+
+    <section class="summary-card">
+
+      <div class="summary-title">
+
+        <span>💰</span>
+
+        <h2>Bill Summary</h2>
+
+      </div>
+
+
+      <div class="summary-row">
+
+        <span>Subtotal</span>
+
+        <strong>
+          ₹<span id="subtotal">0.00</span>
+        </strong>
+
+      </div>
+
+
+      <div class="discount-row">
+
+        <span>Discount</span>
+
+        <input
+          id="discount"
+          type="number"
+          value="0"
+          min="0"
+        >
+
+      </div>
+
+
+      <div class="total-row">
+
+        <span>Total</span>
+
+        <strong>
+          ₹<span id="total">0.00</span>
+        </strong>
+
+      </div>
+
+
+      <div class="paid-row">
+
+        <span>Paid</span>
+
+        <input
+          id="paid"
+          type="number"
+          value="0"
+          min="0"
+        >
+
+      </div>
+
+
+      <div class="due-row">
+
+        <div>
+          <span>Amount Due</span>
+          <small>Remaining payment</small>
+        </div>
+
+        <strong>
+          ₹<span id="due">0.00</span>
+        </strong>
+
+      </div>
+
+    </section>
+
+
+    <!-- PAYMENT -->
+
+    <section class="card">
+
+      <div class="section-heading">
+
+        <div class="heading-icon">
+          💳
+        </div>
+
+        <div>
+          <h2>Payment</h2>
+          <p>Payment status and notes</p>
+        </div>
+
+      </div>
+
+
+      <div class="input-group">
+
+        <label>Payment Status</label>
+
+        <select id="paymentStatus">
+
+          <option value="Pending">
+            Pending
+          </option>
+
+          <option value="Partially Paid">
+            Partially Paid
+          </option>
+
+          <option value="Paid">
+            Paid
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div class="input-group">
+
+        <label>Notes</label>
+
+        <textarea
+          id="notes"
+          placeholder="Write a note for the customer..."
+        ></textarea>
+
+      </div>
+
+    </section>
+
+
+    <!-- ACTIONS -->
+
+    <section class="action-area">
 
       <button
-        type="button"
-        class="add-btn"
-        onclick="addItem()"
+        class="primary-action"
+        onclick="downloadBillImage()"
       >
-        + Add Item
+        <span>📥</span>
+        Download Bill
       </button>
 
-    </div>
 
-    <div id="items"></div>
-
-  </section>
-
-
-  <!-- Total -->
-  <section class="card totals">
-
-    <div>
-      <span>Subtotal</span>
-      <strong>₹<span id="subtotal">0.00</span></strong>
-    </div>
-
-    <div>
-      <span>Discount</span>
-
-      <input
-        id="discount"
-        type="number"
-        value="0"
-        min="0"
+      <button
+        class="whatsapp-action"
+        onclick="sendWhatsApp()"
       >
-    </div>
+        <span>📲</span>
+        Send WhatsApp
+      </button>
 
-    <div class="grand">
-      <span>Total</span>
-      <strong>₹<span id="total">0.00</span></strong>
-    </div>
 
-    <div>
-      <span>Paid</span>
-
-      <input
-        id="paid"
-        type="number"
-        value="0"
-        min="0"
+      <button
+        class="save-action"
+        onclick="saveInvoice()"
       >
+        <span>💾</span>
+        Save Invoice
+      </button>
+
+
+      <button
+        class="clear-action"
+        onclick="clearInvoice()"
+      >
+        🗑️ Clear
+      </button>
+
+    </section>
+
+  </main>
+
+
+  <footer>
+
+    <div class="footer-logo">
+      PW
     </div>
 
-    <div class="due">
-      <span>Due</span>
-      <strong>₹<span id="due">0.00</span></strong>
-    </div>
+    <strong>
+      Parbez Works
+    </strong>
 
-  </section>
+    <p>
+      Professional Electrical • False Ceiling • Plumbing
+    </p>
 
+    <small>
+      © 2026 Parbez Works
+    </small>
 
-  <!-- Payment -->
-  <section class="card">
-
-    <h2>Payment Status</h2>
-
-    <select id="paymentStatus">
-
-      <option value="Pending">
-        Pending
-      </option>
-
-      <option value="Partially Paid">
-        Partially Paid
-      </option>
-
-      <option value="Paid">
-        Paid
-      </option>
-
-    </select>
+  </footer>
 
 
-    <label>Notes</label>
-
-    <textarea
-      id="notes"
-      placeholder="Any additional note..."
-    ></textarea>
-
-  </section>
-
-
-  <!-- Buttons -->
-  <div class="actions">
-
-    <button
-      type="button"
-      class="save-btn"
-      onclick="saveInvoice()"
-    >
-      💾 Save
-    </button>
-
-
-    <button
-      type="button"
-      class="whatsapp-btn"
-      onclick="sendWhatsApp()"
-    >
-      📲 WhatsApp
-    </button>
-
-
-    <button
-      type="button"
-      class="download-btn"
-      onclick="downloadBillImage()"
-    >
-      📥 Download Bill
-    </button>
-
-
-    <button
-      type="button"
-      class="clear-btn"
-      onclick="clearInvoice()"
-    >
-      🗑️ Clear
-    </button>
-
-  </div>
-
-</main>
-
-
-<footer>
-
-  <p>© 2026 Parbez Works</p>
-
-  <p>
-    Electrical • False Ceiling • Plumbing
-  </p>
-
-</footer>
-
-
-<!-- Image generation library -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
-<!-- Main JavaScript -->
-<script src="script.js"></script>
+  <script src="script.js"></script>
 
 </body>
 </html>
