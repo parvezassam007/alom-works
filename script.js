@@ -1,10 +1,12 @@
 let itemCount = 0;
 
+
 // =========================================
 // PAGE LOAD
 // =========================================
 
 document.addEventListener("DOMContentLoaded", function () {
+
   setTodayDate();
 
   const items = document.getElementById("items");
@@ -14,6 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   calculateTotal();
+
 });
 
 
@@ -22,6 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
 // =========================================
 
 function setTodayDate() {
+
   const dateInput = document.getElementById("date");
 
   if (!dateInput) return;
@@ -33,6 +37,7 @@ function setTodayDate() {
   const dd = String(today.getDate()).padStart(2, "0");
 
   dateInput.value = `${yyyy}-${mm}-${dd}`;
+
 }
 
 
@@ -41,6 +46,7 @@ function setTodayDate() {
 // =========================================
 
 function addItem() {
+
   const items = document.getElementById("items");
 
   if (!items) return;
@@ -107,6 +113,7 @@ function addItem() {
   items.appendChild(item);
 
   calculateTotal();
+
 }
 
 
@@ -115,6 +122,7 @@ function addItem() {
 // =========================================
 
 function removeItem(button) {
+
   const item = button.closest(".item");
 
   if (item) {
@@ -122,6 +130,7 @@ function removeItem(button) {
   }
 
   calculateTotal();
+
 }
 
 
@@ -130,9 +139,11 @@ function removeItem(button) {
 // =========================================
 
 function calculateTotal() {
+
   let subtotal = 0;
 
   document.querySelectorAll(".item").forEach(function (item) {
+
     const qty =
       parseFloat(
         item.querySelector(".item-qty")?.value
@@ -149,11 +160,14 @@ function calculateTotal() {
       item.querySelector(".item-amount");
 
     if (amountElement) {
+
       amountElement.textContent =
         amount.toFixed(2);
+
     }
 
     subtotal += amount;
+
   });
 
 
@@ -188,19 +202,28 @@ function calculateTotal() {
 
 
   if (subtotalElement) {
+
     subtotalElement.textContent =
       subtotal.toFixed(2);
+
   }
+
 
   if (totalElement) {
+
     totalElement.textContent =
       total.toFixed(2);
+
   }
 
+
   if (dueElement) {
+
     dueElement.textContent =
       due.toFixed(2);
+
   }
+
 }
 
 
@@ -209,9 +232,11 @@ function calculateTotal() {
 // =========================================
 
 function saveInvoice() {
+
   calculateTotal();
 
   const invoice = {
+
     invoiceNo:
       document.getElementById("invoiceNo")?.value.trim() || "",
 
@@ -249,11 +274,14 @@ function saveInvoice() {
       document.getElementById("due")?.textContent || "0.00",
 
     items: []
+
   };
 
 
   document.querySelectorAll(".item").forEach(function (item) {
+
     invoice.items.push({
+
       name:
         item.querySelector(".item-name")?.value.trim() || "",
 
@@ -265,7 +293,9 @@ function saveInvoice() {
 
       amount:
         item.querySelector(".item-amount")?.textContent || "0.00"
+
     });
+
   });
 
 
@@ -276,6 +306,7 @@ function saveInvoice() {
 
 
   alert("Invoice saved successfully!");
+
 }
 
 
@@ -283,21 +314,29 @@ function saveInvoice() {
 // DOWNLOAD BILL PNG
 // =========================================
 
-async function downloadBillJPG() {
+async function downloadBillPNG() {
+
   const bill =
     document.getElementById("billArea");
 
+
   if (!bill) {
+
     alert("Bill area nahi mila.");
+
     return;
+
   }
 
 
   if (typeof html2canvas === "undefined") {
+
     alert(
       "PNG feature load nahi hua. Internet ON karke page reload karo."
     );
+
     return;
+
   }
 
 
@@ -310,23 +349,32 @@ async function downloadBillJPG() {
       ?.value.trim() || "PW-BILL";
 
 
-  // Export CSS mode
+  // =========================================
+  // EXPORT MODE
+  // =========================================
+
   bill.classList.add("export-mode");
 
 
-  // Browser ko CSS apply karne ka time
+  // Wait for CSS
   await new Promise(function (resolve) {
+
     requestAnimationFrame(function () {
+
       requestAnimationFrame(resolve);
+
     });
+
   });
 
 
   try {
+
     const canvas =
       await html2canvas(
         bill,
         {
+
           scale: 3,
 
           useCORS: true,
@@ -354,15 +402,17 @@ async function downloadBillJPG() {
               document.documentElement.scrollHeight,
               bill.scrollHeight
             )
+
         }
       );
 
 
-    // PNG image
+    // =========================================
+    // PNG IMAGE
+    // =========================================
+
     const image =
-      canvas.toDataURL(
-        "image/png"
-      );
+      canvas.toDataURL("image/png");
 
 
     const link =
@@ -370,6 +420,7 @@ async function downloadBillJPG() {
 
 
     link.href = image;
+
 
     link.download =
       `${invoiceNo}-Bill.png`;
@@ -383,28 +434,35 @@ async function downloadBillJPG() {
 
 
   } catch (error) {
+
     console.error(
       "PNG Error:",
       error
     );
 
+
     alert(
       "Bill PNG banane mein problem hui."
     );
 
+
   } finally {
+
     bill.classList.remove(
       "export-mode"
     );
+
   }
+
 }
 
 
 // =========================================
-// WHATSAPP
+// WHATSAPP INVOICE
 // =========================================
 
 function sendWhatsApp() {
+
   calculateTotal();
 
 
@@ -439,7 +497,7 @@ function sendWhatsApp() {
   const address =
     document
       .getElementById("customerAddress")
-      ?.value.trim() || "";
+      ?.value.trim() || "N/A";
 
 
   // =========================================
@@ -485,25 +543,29 @@ function sendWhatsApp() {
   const notes =
     document
       .getElementById("notes")
-      ?.value.trim() || "";
+      ?.value.trim() || "No notes";
 
 
   // =========================================
-  // DATE DD-MM-YYYY
+  // DATE FORMAT
   // =========================================
 
   let formattedDate = "N/A";
 
 
   if (invoiceDate) {
+
     const parts =
       invoiceDate.split("-");
 
 
     if (parts.length === 3) {
+
       formattedDate =
         `${parts[2]}-${parts[1]}-${parts[0]}`;
+
     }
+
   }
 
 
@@ -549,6 +611,7 @@ Rate: ₹${rate}
 Amount: ₹${amount}
 
 `;
+
     });
 
 
@@ -556,53 +619,40 @@ Amount: ₹${amount}
   // WHATSAPP MESSAGE
   // =========================================
 
-  let message =
-`PARBEZ WORKS
+  const message =
+`*PARBEZ WORKS*
+
+🧾 *INVOICE*
 
 Invoice No: ${invoiceNo}
 Date: ${formattedDate}
 
-Customer: ${name}`;
+👤 *Customer Details*
+Name: ${name}
+Phone: ${phone || "N/A"}
+Address: ${address}
 
+🔧 *WORK / ITEMS*
 
-  if (address) {
-    message +=
-`
+━━━━━━━━━━━━━━
 
-Address: ${address}`;
-  }
-
-
-  message +=
-`
-
-WORK / ITEMS
-
-${itemText || "No items added."}
-
-Subtotal: ₹${subtotal}
+${itemText || "No items added.\n\n"}Subtotal: ₹${subtotal}
 Discount: ₹${discount}
-Total: ₹${total}
+*TOTAL: ₹${total}*
+
 Paid: ₹${paid}
-Due: ₹${due}
+*DUE: ₹${due}*
 
-Payment Status: ${paymentStatus}`;
+Payment Status: ${paymentStatus}
 
+📝 *NOTE*
+${notes}
 
-  if (notes) {
-    message +=
-`
-
-Note: ${notes}`;
-  }
-
-
-  message +=
-`
+━━━━━━━━━━━━━━
 
 Electrical • False Ceiling • Plumbing
 
-Thank you for choosing PARBEZ WORKS!`;
+Thank you for choosing *PARBEZ WORKS*!`;
 
 
   // =========================================
@@ -613,36 +663,49 @@ Thank you for choosing PARBEZ WORKS!`;
     phone.replace(/\D/g, "");
 
 
-  // +91 98765 43210
-  if (
+  // =========================================
+  // 10 DIGIT NUMBER
+  // =========================================
+
+  if (cleanPhone.length === 10) {
+
+    cleanPhone =
+      "91" + cleanPhone;
+
+  }
+
+
+  // =========================================
+  // 91 + 10 DIGIT NUMBER
+  // =========================================
+
+  else if (
     cleanPhone.startsWith("91") &&
     cleanPhone.length === 12
   ) {
+
     // Already correct
+
   }
 
 
-  // 9876543210
-  else if (
-    cleanPhone.length === 10
-  ) {
-    cleanPhone =
-      "91" + cleanPhone;
-  }
+  // =========================================
+  // INVALID NUMBER
+  // =========================================
 
-
-  // Invalid number
   else {
+
     alert(
       "Customer ka 10 digit WhatsApp number enter karein."
     );
 
     return;
+
   }
 
 
   // =========================================
-  // OPEN DIRECT CUSTOMER CHAT
+  // OPEN WHATSAPP
   // =========================================
 
   const encodedMessage =
@@ -657,6 +720,7 @@ Thank you for choosing PARBEZ WORKS!`;
     url,
     "_blank"
   );
+
 }
 
 
@@ -665,6 +729,7 @@ Thank you for choosing PARBEZ WORKS!`;
 // =========================================
 
 function clearInvoice() {
+
   const confirmClear =
     confirm(
       "Kya aap poora invoice clear karna chahte hain?"
@@ -672,7 +737,9 @@ function clearInvoice() {
 
 
   if (!confirmClear) {
+
     return;
+
   }
 
 
@@ -702,64 +769,102 @@ function clearInvoice() {
 
 
   if (invoiceNo) {
+
     invoiceNo.value = "";
+
   }
+
 
   if (customerName) {
+
     customerName.value = "";
+
   }
+
 
   if (customerPhone) {
+
     customerPhone.value = "";
+
   }
+
 
   if (customerAddress) {
+
     customerAddress.value = "";
+
   }
+
 
   if (discount) {
+
     discount.value = "0";
+
   }
+
 
   if (paid) {
+
     paid.value = "0";
+
   }
+
 
   if (paymentStatus) {
+
     paymentStatus.value = "Pending";
+
   }
+
 
   if (notes) {
+
     notes.value = "";
+
   }
 
 
-  // Today's date
+  // =========================================
+  // TODAY'S DATE
+  // =========================================
+
   setTodayDate();
 
 
-  // Clear items
+  // =========================================
+  // CLEAR ITEMS
+  // =========================================
+
   const items =
     document.getElementById("items");
 
 
   if (items) {
+
     items.innerHTML = "";
+
   }
 
 
   itemCount = 0;
 
 
-  // Add first item again
+  // =========================================
+  // ADD FIRST ITEM
+  // =========================================
+
   addItem();
 
 
   calculateTotal();
 
 
-  // Remove saved invoice
+  // =========================================
+  // REMOVE SAVED INVOICE
+  // =========================================
+
   localStorage.removeItem(
     "parbezWorksInvoice"
   );
+
 }
