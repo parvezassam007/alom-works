@@ -1,1010 +1,373 @@
-// ==========================================
-// PARBEZ WORKS
-// MODERN BILLING SYSTEM
-// ==========================================
-
 let itemCount = 0;
 
+document.addEventListener("DOMContentLoaded", function () {
 
-// ==========================================
-// PAGE LOAD
-// ==========================================
+// Today's date
+const dateInput = document.getElementById("date");
 
-document.addEventListener(
-  "DOMContentLoaded",
-  function () {
+if (dateInput) {
+const today = new Date();
+const yyyy = today.getFullYear();
+const mm = String(today.getMonth() + 1).padStart(2, "0");
+const dd = String(today.getDate()).padStart(2, "0");
 
-    const date =
-      document.getElementById("date");
+dateInput.value = `${yyyy}-${mm}-${dd}`;
 
-    if (date) {
-      date.valueAsDate =
-        new Date();
-    }
+}
 
-    addItem();
+// First item automatically
+addItem();
+});
 
-    calculateTotal();
-
-  }
-);
-
-
-// ==========================================
+// ==============================
 // ADD ITEM
-// ==========================================
+// ==============================
 
 function addItem() {
 
-  itemCount++;
+itemCount++;
 
-  const container =
-    document.getElementById("items");
+const items = document.getElementById("items");
 
-  if (!container) {
-    return;
-  }
+const item = document.createElement("div");
 
+item.className = "item";
 
-  const item =
-    document.createElement("div");
+item.innerHTML = `
+<div class="item-grid">
 
-  item.className = "item";
-
-  item.id =
-    "item-" + itemCount;
-
-
-  item.innerHTML = `
-
-    <div class="item-grid">
-
-      <div class="input-group">
-
-        <label>Work / Item</label>
-
-        <input
-          type="text"
-          class="item-name"
-          placeholder="Electrical Point"
-        >
-
-      </div>
-
-
-      <div class="input-group">
-
-        <label>Qty</label>
-
-        <input
-          type="number"
-          class="item-qty"
-          value="1"
-          min="0"
-        >
-
-      </div>
-
-
-      <div class="input-group">
-
-        <label>Rate (₹)</label>
-
-        <input
-          type="number"
-          class="item-rate"
-          value="0"
-          min="0"
-        >
-
-      </div>
-
-    </div>
-
-
-    <button
-      type="button"
-      class="remove-btn"
-      onclick="removeItem(${itemCount})"
+  <div>
+    <label>Work / Item</label>
+    <input
+      class="item-name"
+      placeholder="Example: Fan installation"
     >
-      ✕ Remove Item
-    </button>
+  </div>
 
-  `;
+  <div>
+    <label>Qty</label>
+    <input
+      class="item-qty"
+      type="number"
+      value="1"
+      min="0"
+      oninput="calculateTotal()"
+    >
+  </div>
 
+  <div>
+    <label>Rate (₹)</label>
+    <input
+      class="item-rate"
+      type="number"
+      value="0"
+      min="0"
+      oninput="calculateTotal()"
+    >
+  </div>
 
-  container.appendChild(item);
+  <button
+    type="button"
+    class="remove-btn no-print"
+    onclick="removeItem(this)"
+  >
+    ✕
+  </button>
 
+</div>
 
-  item.querySelector(
-    ".item-qty"
-  ).addEventListener(
-    "input",
-    calculateTotal
-  );
+<div style="text-align:right;margin-top:10px;">
+  Amount:
+  <strong>₹<span class="item-amount">0.00</span></strong>
+</div>
 
+`;
 
-  item.querySelector(
-    ".item-rate"
-  ).addEventListener(
-    "input",
-    calculateTotal
-  );
+items.appendChild(item);
 
-
-  calculateTotal();
-
+calculateTotal();
 }
 
-
-// ==========================================
+// ==============================
 // REMOVE ITEM
-// ==========================================
+// ==============================
 
-function removeItem(id) {
+function removeItem(button) {
 
-  const item =
-    document.getElementById(
-      "item-" + id
-    );
+const item = button.closest(".item");
 
-
-  if (item) {
-
-    item.remove();
-
-    calculateTotal();
-
-  }
-
+if (item) {
+item.remove();
 }
 
+calculateTotal();
+}
 
-// ==========================================
-// CALCULATE
-// ==========================================
+// ==============================
+// CALCULATE TOTAL
+// ==============================
 
 function calculateTotal() {
 
-  let subtotal = 0;
+let subtotal = 0;
 
+const items = document.querySelectorAll(".item");
 
-  document
-    .querySelectorAll(".item")
-    .forEach(
-      function (item) {
+items.forEach(function (item) {
 
-        const qty =
-          parseFloat(
-            item.querySelector(
-              ".item-qty"
-            ).value
-          ) || 0;
+const qty =
+  parseFloat(item.querySelector(".item-qty").value) || 0;
 
+const rate =
+  parseFloat(item.querySelector(".item-rate").value) || 0;
 
-        const rate =
-          parseFloat(
-            item.querySelector(
-              ".item-rate"
-            ).value
-          ) || 0;
+const amount = qty * rate;
 
+item.querySelector(".item-amount").textContent =
+  amount.toFixed(2);
 
-        subtotal +=
-          qty * rate;
+subtotal += amount;
 
-      }
-    );
+});
 
+const discount =
+parseFloat(document.getElementById("discount").value) || 0;
 
-  const discount =
-    parseFloat(
-      document.getElementById(
-        "discount"
-      )?.value
-    ) || 0;
+const paid =
+parseFloat(document.getElementById("paid").value) || 0;
 
+const total = Math.max(0, subtotal - discount);
 
-  const paid =
-    parseFloat(
-      document.getElementById(
-        "paid"
-      )?.value
-    ) || 0;
+const due = Math.max(0, total - paid);
 
+document.getElementById("subtotal").textContent =
+subtotal.toFixed(2);
 
-  const total =
-    Math.max(
-      0,
-      subtotal - discount
-    );
+document.getElementById("total").textContent =
+total.toFixed(2);
 
-
-  const due =
-    Math.max(
-      0,
-      total - paid
-    );
-
-
-  document.getElementById(
-    "subtotal"
-  ).textContent =
-    subtotal.toFixed(2);
-
-
-  document.getElementById(
-    "total"
-  ).textContent =
-    total.toFixed(2);
-
-
-  document.getElementById(
-    "due"
-  ).textContent =
-    due.toFixed(2);
-
+document.getElementById("due").textContent =
+due.toFixed(2);
 }
 
-
-// ==========================================
-// DISCOUNT / PAID EVENTS
-// ==========================================
-
-document.addEventListener(
-  "input",
-  function (event) {
-
-    if (
-      event.target.id ===
-      "discount" ||
-
-      event.target.id ===
-      "paid"
-    ) {
-
-      calculateTotal();
-
-    }
-
-  }
-);
-
-
-// ==========================================
-// GET DATA
-// ==========================================
-
-function getInvoiceData() {
-
-  const items = [];
-
-
-  document
-    .querySelectorAll(".item")
-    .forEach(
-      function (item) {
-
-        const name =
-          item.querySelector(
-            ".item-name"
-          ).value.trim();
-
-
-        const qty =
-          parseFloat(
-            item.querySelector(
-              ".item-qty"
-            ).value
-          ) || 0;
-
-
-        const rate =
-          parseFloat(
-            item.querySelector(
-              ".item-rate"
-            ).value
-          ) || 0;
-
-
-        items.push({
-
-          name: name,
-
-          qty: qty,
-
-          rate: rate,
-
-          amount:
-            qty * rate
-
-        });
-
-      }
-    );
-
-
-  return {
-
-    invoiceNo:
-      document.getElementById(
-        "invoiceNo"
-      ).value,
-
-    date:
-      document.getElementById(
-        "date"
-      ).value,
-
-    customerName:
-      document.getElementById(
-        "customerName"
-      ).value,
-
-    customerPhone:
-      document.getElementById(
-        "customerPhone"
-      ).value,
-
-    customerAddress:
-      document.getElementById(
-        "customerAddress"
-      ).value,
-
-    items: items,
-
-    subtotal:
-      parseFloat(
-        document.getElementById(
-          "subtotal"
-        ).textContent
-      ) || 0,
-
-    discount:
-      parseFloat(
-        document.getElementById(
-          "discount"
-        ).value
-      ) || 0,
-
-    total:
-      parseFloat(
-        document.getElementById(
-          "total"
-        ).textContent
-      ) || 0,
-
-    paid:
-      parseFloat(
-        document.getElementById(
-          "paid"
-        ).value
-      ) || 0,
-
-    due:
-      parseFloat(
-        document.getElementById(
-          "due"
-        ).textContent
-      ) || 0,
-
-    paymentStatus:
-      document.getElementById(
-        "paymentStatus"
-      ).value,
-
-    notes:
-      document.getElementById(
-        "notes"
-      ).value
-
-  };
-
-}
-
-
-// ==========================================
-// SAVE
-// ==========================================
+// ==============================
+// SAVE INVOICE
+// ==============================
 
 function saveInvoice() {
 
-  const invoice =
-    getInvoiceData();
+const invoice = {
 
+invoiceNo:
+  document.getElementById("invoiceNo").value,
 
-  let invoices =
-    JSON.parse(
-      localStorage.getItem(
-        "parbezWorksInvoices"
-      )
-    ) || [];
+date:
+  document.getElementById("date").value,
 
+customerName:
+  document.getElementById("customerName").value,
 
-  invoices.push(invoice);
+customerPhone:
+  document.getElementById("customerPhone").value,
 
+customerAddress:
+  document.getElementById("customerAddress").value,
 
-  localStorage.setItem(
-    "parbezWorksInvoices",
-    JSON.stringify(
-      invoices
-    )
-  );
+discount:
+  document.getElementById("discount").value,
 
+paid:
+  document.getElementById("paid").value,
 
-  alert(
-    "Invoice saved successfully! ✅"
-  );
+paymentStatus:
+  document.getElementById("paymentStatus").value,
 
+notes:
+  document.getElementById("notes").value,
+
+total:
+  document.getElementById("total").textContent,
+
+due:
+  document.getElementById("due").textContent,
+
+items: []
+
+};
+
+document.querySelectorAll(".item").forEach(function (item) {
+
+invoice.items.push({
+
+  name:
+    item.querySelector(".item-name").value,
+
+  qty:
+    item.querySelector(".item-qty").value,
+
+  rate:
+    item.querySelector(".item-rate").value,
+
+  amount:
+    item.querySelector(".item-amount").textContent
+
+});
+
+});
+
+localStorage.setItem(
+"parbezWorksInvoice",
+JSON.stringify(invoice)
+);
+
+alert("Invoice saved successfully!");
 }
 
+// ==============================
+// DOWNLOAD BILL AS JPG
+// ==============================
 
-// ==========================================
+async function downloadBillJPG() {
+
+const bill = document.getElementById("billArea");
+
+if (!window.html2canvas) {
+alert("JPG feature load nahi hua. Internet ON karke page reload karo.");
+return;
+}
+
+const oldTitle = document.title;
+
+const invoiceNo =
+document.getElementById("invoiceNo").value.trim() || "PW-BILL";
+
+// Buttons temporarily hide
+bill.classList.add("export-mode");
+
+// Wait for rendering
+await new Promise(resolve => setTimeout(resolve, 300));
+
+try {
+
+const canvas = await html2canvas(bill, {
+
+  scale: 2,
+
+  useCORS: true,
+
+  backgroundColor: "#ffffff",
+
+  scrollX: 0,
+
+  scrollY: -window.scrollY,
+
+  windowWidth: bill.scrollWidth,
+
+  windowHeight: bill.scrollHeight
+
+});
+
+
+const image = canvas.toDataURL(
+  "image/jpeg",
+  0.95
+);
+
+
+const link = document.createElement("a");
+
+link.href = image;
+
+link.download = `${invoiceNo}-Bill.jpg`;
+
+document.body.appendChild(link);
+
+link.click();
+
+document.body.removeChild(link);
+
+} catch (error) {
+
+console.error(error);
+
+alert("Bill JPG banane mein problem hui.");
+
+} finally {
+
+bill.classList.remove("export-mode");
+
+document.title = oldTitle;
+
+}
+}
+
+// ==============================
 // WHATSAPP
-// ==========================================
+// ==============================
 
 function sendWhatsApp() {
 
-  const invoice =
-    getInvoiceData();
+const phone =
+document.getElementById("customerPhone").value.trim();
 
+const name =
+document.getElementById("customerName").value.trim();
 
-  const phone =
-    invoice.customerPhone
-      .replace(
-        /\D/g,
-        ""
-      );
+const invoiceNo =
+document.getElementById("invoiceNo").value.trim();
 
+const total =
+document.getElementById("total").textContent;
 
-  if (!phone) {
+const due =
+document.getElementById("due").textContent;
 
-    alert(
-      "Enter customer phone number first."
-    );
+let message =
+`PARBEZ WORKS
 
-    return;
+Invoice: ${invoiceNo || "N/A"}
+Customer: ${name || "N/A"}
 
-  }
+Total: ₹${total}
+Due: ₹${due}
 
+Electrical • False Ceiling • Plumbing`;
 
-  let message =
-    "PARBEZ WORKS\n\n";
+let cleanPhone = phone.replace(/\D/g, "");
 
-
-  message +=
-    "Invoice: " +
-    (invoice.invoiceNo || "N/A") +
-    "\n";
-
-
-  message +=
-    "Date: " +
-    (invoice.date || "N/A") +
-    "\n\n";
-
-
-  message +=
-    "Customer: " +
-    (invoice.customerName || "N/A") +
-    "\n";
-
-
-  message +=
-    "Address: " +
-    (invoice.customerAddress || "N/A") +
-    "\n\n";
-
-
-  message +=
-    "WORK DETAILS\n";
-
-
-  invoice.items.forEach(
-    function (item) {
-
-      message +=
-        (item.name || "Item") +
-        " - " +
-        item.qty +
-        " × ₹" +
-        item.rate +
-        " = ₹" +
-        item.amount +
-        "\n";
-
-    }
-  );
-
-
-  message +=
-    "\nSubtotal: ₹" +
-    invoice.subtotal.toFixed(2);
-
-
-  message +=
-    "\nDiscount: ₹" +
-    invoice.discount.toFixed(2);
-
-
-  message +=
-    "\nTotal: ₹" +
-    invoice.total.toFixed(2);
-
-
-  message +=
-    "\nPaid: ₹" +
-    invoice.paid.toFixed(2);
-
-
-  message +=
-    "\nDue: ₹" +
-    invoice.due.toFixed(2);
-
-
-  message +=
-    "\nStatus: " +
-    invoice.paymentStatus;
-
-
-  if (invoice.notes) {
-
-    message +=
-      "\n\nNote: " +
-      invoice.notes;
-
-  }
-
-
-  const url =
-    "https://wa.me/" +
-    phone +
-    "?text=" +
-    encodeURIComponent(
-      message
-    );
-
-
-  window.open(
-    url,
-    "_blank"
-  );
-
+if (cleanPhone.length === 10) {
+cleanPhone = "91" + cleanPhone;
 }
 
+const url =
+"https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}";
 
-// ==========================================
-// DOWNLOAD BILL IMAGE
-// ==========================================
-
-function downloadBillImage() {
-
-  const invoice =
-    getInvoiceData();
-
-
-  if (!invoice.customerName) {
-
-    alert(
-      "Enter customer name first."
-    );
-
-    return;
-
-  }
-
-
-  if (
-    typeof html2canvas ===
-    "undefined"
-  ) {
-
-    alert(
-      "Image library could not load. Check internet and refresh."
-    );
-
-    return;
-
-  }
-
-
-  const bill =
-    document.createElement(
-      "div"
-    );
-
-
-  bill.style.width =
-    "700px";
-
-  bill.style.padding =
-    "35px";
-
-  bill.style.background =
-    "#ffffff";
-
-  bill.style.color =
-    "#0f172a";
-
-  bill.style.fontFamily =
-    "Arial, sans-serif";
-
-  bill.style.position =
-    "fixed";
-
-  bill.style.left =
-    "-10000px";
-
-  bill.style.top =
-    "0";
-
-
-  let rows = "";
-
-
-  invoice.items.forEach(
-    function (item) {
-
-      rows += `
-
-        <tr>
-
-          <td style="
-            padding:10px;
-            border:1px solid #ddd;
-          ">
-            ${item.name || "Item"}
-          </td>
-
-          <td style="
-            padding:10px;
-            border:1px solid #ddd;
-            text-align:center;
-          ">
-            ${item.qty}
-          </td>
-
-          <td style="
-            padding:10px;
-            border:1px solid #ddd;
-            text-align:right;
-          ">
-            ₹${item.rate.toFixed(2)}
-          </td>
-
-          <td style="
-            padding:10px;
-            border:1px solid #ddd;
-            text-align:right;
-          ">
-            ₹${item.amount.toFixed(2)}
-          </td>
-
-        </tr>
-
-      `;
-
-    }
-  );
-
-
-  bill.innerHTML = `
-
-    <div style="
-      background:#0f172a;
-      color:white;
-      padding:22px;
-      border-radius:12px;
-      text-align:center;
-    ">
-
-      <h1 style="
-        margin:0;
-        font-size:30px;
-      ">
-        PARBEZ WORKS
-      </h1>
-
-      <p style="
-        margin:5px 0 0;
-      ">
-        Electrical • False Ceiling • Plumbing
-      </p>
-
-    </div>
-
-
-    <div style="
-      padding:20px 0;
-    ">
-
-      <p>
-        <b>Invoice:</b>
-        ${invoice.invoiceNo || "N/A"}
-      </p>
-
-      <p>
-        <b>Date:</b>
-        ${invoice.date || "N/A"}
-      </p>
-
-      <p>
-        <b>Customer:</b>
-        ${invoice.customerName}
-      </p>
-
-      <p>
-        <b>Phone:</b>
-        ${invoice.customerPhone || "N/A"}
-      </p>
-
-      <p>
-        <b>Address:</b>
-        ${invoice.customerAddress || "N/A"}
-      </p>
-
-    </div>
-
-
-    <table style="
-      width:100%;
-      border-collapse:collapse;
-    ">
-
-      <thead>
-
-        <tr style="
-          background:#eff6ff;
-        ">
-
-          <th style="
-            padding:10px;
-            border:1px solid #ddd;
-            text-align:left;
-          ">
-            Work
-          </th>
-
-          <th style="
-            padding:10px;
-            border:1px solid #ddd;
-          ">
-            Qty
-          </th>
-
-          <th style="
-            padding:10px;
-            border:1px solid #ddd;
-          ">
-            Rate
-          </th>
-
-          <th style="
-            padding:10px;
-            border:1px solid #ddd;
-          ">
-            Amount
-          </th>
-
-        </tr>
-
-      </thead>
-
-      <tbody>
-        ${rows}
-      </tbody>
-
-    </table>
-
-
-    <div style="
-      text-align:right;
-      margin-top:22px;
-    ">
-
-      <p>
-        Subtotal:
-        <b>₹${invoice.subtotal.toFixed(2)}</b>
-      </p>
-
-      <p>
-        Discount:
-        <b>₹${invoice.discount.toFixed(2)}</b>
-      </p>
-
-      <h2 style="
-        color:#2563eb;
-      ">
-        Total:
-        ₹${invoice.total.toFixed(2)}
-      </h2>
-
-      <p>
-        Paid:
-        <b>₹${invoice.paid.toFixed(2)}</b>
-      </p>
-
-      <h2 style="
-        color:#ea580c;
-      ">
-        Due:
-        ₹${invoice.due.toFixed(2)}
-      </h2>
-
-    </div>
-
-
-    <div style="
-      margin-top:25px;
-      padding-top:15px;
-      border-top:1px solid #ddd;
-    ">
-
-      <p>
-        <b>Payment Status:</b>
-        ${invoice.paymentStatus}
-      </p>
-
-      ${
-        invoice.notes
-          ? `
-            <p style="margin-top:8px;">
-              <b>Note:</b>
-              ${invoice.notes}
-            </p>
-          `
-          : ""
-      }
-
-    </div>
-
-
-    <p style="
-      text-align:center;
-      margin-top:30px;
-      color:#64748b;
-    ">
-      Thank you for choosing Parbez Works
-    </p>
-
-  `;
-
-
-  document.body.appendChild(
-    bill
-  );
-
-
-  html2canvas(
-    bill,
-    {
-      scale: 2,
-      backgroundColor: "#ffffff"
-    }
-  )
-  .then(
-    function (canvas) {
-
-      const link =
-        document.createElement(
-          "a"
-        );
-
-
-      link.download =
-        "Parbez-Works-" +
-        (
-          invoice.invoiceNo ||
-          "Bill"
-        ) +
-        ".png";
-
-
-      link.href =
-        canvas.toDataURL(
-          "image/png"
-        );
-
-
-      link.click();
-
-
-      bill.remove();
-
-    }
-  )
-  .catch(
-    function (error) {
-
-      console.error(error);
-
-      bill.remove();
-
-      alert(
-        "Could not create bill image."
-      );
-
-    }
-  );
-
+window.open(url, "_blank");
 }
 
-
-// ==========================================
+// ==============================
 // CLEAR
-// ==========================================
+// ==============================
 
 function clearInvoice() {
 
-  if (
-    !confirm(
-      "Clear this invoice?"
-    )
-  ) {
+const confirmClear =
+confirm("Kya aap poora invoice clear karna chahte hain?");
 
-    return;
+if (!confirmClear) return;
 
-  }
+document.getElementById("invoiceNo").value = "";
+document.getElementById("customerName").value = "";
+document.getElementById("customerPhone").value = "";
+document.getElementById("customerAddress").value = "";
+document.getElementById("discount").value = "0";
+document.getElementById("paid").value = "0";
+document.getElementById("paymentStatus").value = "Pending";
+document.getElementById("notes").value = "";
 
+document.getElementById("items").innerHTML = "";
 
-  document.getElementById(
-    "invoiceNo"
-  ).value = "";
+addItem();
 
-
-  document.getElementById(
-    "customerName"
-  ).value = "";
-
-
-  document.getElementById(
-    "customerPhone"
-  ).value = "";
-
-
-  document.getElementById(
-    "customerAddress"
-  ).value = "";
-
-
-  document.getElementById(
-    "discount"
-  ).value = 0;
-
-
-  document.getElementById(
-    "paid"
-  ).value = 0;
-
-
-  document.getElementById(
-    "paymentStatus"
-  ).value =
-    "Pending";
-
-
-  document.getElementById(
-    "notes"
-  ).value = "";
-
-
-  document.getElementById(
-    "items"
-  ).innerHTML = "";
-
-
-  itemCount = 0;
-
-
-  addItem();
-
-
-  document.getElementById(
-    "date"
-  ).valueAsDate =
-    new Date();
-
-
-  calculateTotal();
-
-    }
+calculateTotal();
+}
