@@ -1,872 +1,1010 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+// ==========================================
+// PARBEZ WORKS
+// MODERN BILLING SYSTEM
+// ==========================================
+
+let itemCount = 0;
+
+
+// ==========================================
+// PAGE LOAD
+// ==========================================
+
+document.addEventListener(
+  "DOMContentLoaded",
+  function () {
+
+    const date =
+      document.getElementById("date");
+
+    if (date) {
+      date.valueAsDate =
+        new Date();
+    }
+
+    addItem();
+
+    calculateTotal();
+
+  }
+);
+
+
+// ==========================================
+// ADD ITEM
+// ==========================================
+
+function addItem() {
+
+  itemCount++;
+
+  const container =
+    document.getElementById("items");
+
+  if (!container) {
+    return;
+  }
+
+
+  const item =
+    document.createElement("div");
+
+  item.className = "item";
+
+  item.id =
+    "item-" + itemCount;
+
+
+  item.innerHTML = `
+
+    <div class="item-grid">
+
+      <div class="input-group">
+
+        <label>Work / Item</label>
+
+        <input
+          type="text"
+          class="item-name"
+          placeholder="Electrical Point"
+        >
+
+      </div>
+
+
+      <div class="input-group">
+
+        <label>Qty</label>
+
+        <input
+          type="number"
+          class="item-qty"
+          value="1"
+          min="0"
+        >
+
+      </div>
+
+
+      <div class="input-group">
+
+        <label>Rate (₹)</label>
+
+        <input
+          type="number"
+          class="item-rate"
+          value="0"
+          min="0"
+        >
+
+      </div>
+
+    </div>
+
+
+    <button
+      type="button"
+      class="remove-btn"
+      onclick="removeItem(${itemCount})"
+    >
+      ✕ Remove Item
+    </button>
+
+  `;
+
+
+  container.appendChild(item);
+
+
+  item.querySelector(
+    ".item-qty"
+  ).addEventListener(
+    "input",
+    calculateTotal
+  );
+
+
+  item.querySelector(
+    ".item-rate"
+  ).addEventListener(
+    "input",
+    calculateTotal
+  );
+
+
+  calculateTotal();
+
 }
 
-:root {
-  --blue: #2563eb;
-  --dark: #0f172a;
-  --text: #1e293b;
-  --muted: #64748b;
-  --bg: #f1f5f9;
-  --white: #ffffff;
-  --green: #16a34a;
-  --red: #dc2626;
-  --purple: #7c3aed;
-  --orange: #f97316;
-}
 
-body {
-  font-family:
-    Inter,
-    Arial,
-    sans-serif;
+// ==========================================
+// REMOVE ITEM
+// ==========================================
 
-  background: var(--bg);
+function removeItem(id) {
 
-  color: var(--text);
-
-  min-height: 100vh;
-}
-
-
-/* =========================
-   TOP BAR
-========================= */
-
-.topbar {
-  background:
-    linear-gradient(
-      135deg,
-      #0f172a,
-      #1d4ed8
+  const item =
+    document.getElementById(
+      "item-" + id
     );
 
-  color: white;
 
-  padding: 18px 16px;
+  if (item) {
 
-  display: flex;
+    item.remove();
 
-  justify-content: space-between;
+    calculateTotal();
 
-  align-items: center;
+  }
 
-  position: sticky;
-
-  top: 0;
-
-  z-index: 10;
-
-  box-shadow:
-    0 4px 18px rgba(0,0,0,.15);
 }
 
 
-.brand {
-  display: flex;
+// ==========================================
+// CALCULATE
+// ==========================================
 
-  align-items: center;
+function calculateTotal() {
 
-  gap: 12px;
-}
-
-
-.logo {
-  width: 48px;
-
-  height: 48px;
-
-  border-radius: 14px;
-
-  background: white;
-
-  color: var(--blue);
-
-  display: flex;
-
-  justify-content: center;
-
-  align-items: center;
-
-  font-size: 18px;
-
-  font-weight: 900;
-
-  box-shadow:
-    0 4px 12px rgba(0,0,0,.2);
-}
+  let subtotal = 0;
 
 
-.brand h1 {
-  font-size: 21px;
+  document
+    .querySelectorAll(".item")
+    .forEach(
+      function (item) {
 
-  letter-spacing: .3px;
-}
-
-
-.brand p {
-  font-size: 11px;
-
-  opacity: .8;
-
-  margin-top: 2px;
-}
+        const qty =
+          parseFloat(
+            item.querySelector(
+              ".item-qty"
+            ).value
+          ) || 0;
 
 
-.print-btn {
-  width: 42px;
-
-  height: 42px;
-
-  border: none;
-
-  border-radius: 12px;
-
-  background:
-    rgba(255,255,255,.15);
-
-  color: white;
-
-  font-size: 19px;
-
-  cursor: pointer;
-}
+        const rate =
+          parseFloat(
+            item.querySelector(
+              ".item-rate"
+            ).value
+          ) || 0;
 
 
-/* =========================
-   MAIN
-========================= */
+        subtotal +=
+          qty * rate;
 
-main {
-  max-width: 850px;
-
-  margin: auto;
-
-  padding: 18px 14px 35px;
-}
-
-
-/* =========================
-   WELCOME
-========================= */
-
-.welcome {
-  background:
-    linear-gradient(
-      135deg,
-      #2563eb,
-      #4f46e5
+      }
     );
 
-  color: white;
 
-  border-radius: 22px;
-
-  padding: 24px;
-
-  display: flex;
-
-  justify-content: space-between;
-
-  align-items: center;
-
-  margin-bottom: 18px;
-
-  box-shadow:
-    0 12px 30px rgba(37,99,235,.22);
-}
-
-
-.small-title {
-  font-size: 10px;
-
-  font-weight: 800;
-
-  letter-spacing: 1.4px;
-
-  opacity: .8;
-
-  margin-bottom: 7px;
-}
-
-
-.welcome h2 {
-  font-size: 24px;
-
-  margin-bottom: 5px;
-}
-
-
-.welcome-text {
-  font-size: 13px;
-
-  opacity: .85;
-}
-
-
-.welcome-icon {
-  font-size: 45px;
-
-  background:
-    rgba(255,255,255,.14);
-
-  width: 70px;
-
-  height: 70px;
-
-  border-radius: 20px;
-
-  display: flex;
-
-  justify-content: center;
-
-  align-items: center;
-}
-
-
-/* =========================
-   CARD
-========================= */
-
-.card {
-  background: white;
-
-  border-radius: 18px;
-
-  padding: 20px;
-
-  margin-bottom: 16px;
-
-  box-shadow:
-    0 5px 20px rgba(15,23,42,.06);
-}
-
-
-.section-heading {
-  display: flex;
-
-  align-items: center;
-
-  gap: 12px;
-
-  margin-bottom: 18px;
-}
-
-
-.heading-icon {
-  width: 42px;
-
-  height: 42px;
-
-  border-radius: 12px;
-
-  background: #eff6ff;
-
-  display: flex;
-
-  justify-content: center;
-
-  align-items: center;
-
-  font-size: 20px;
-}
-
-
-.section-heading h2 {
-  font-size: 17px;
-}
-
-
-.section-heading p {
-  font-size: 12px;
-
-  color: var(--muted);
-
-  margin-top: 2px;
-}
-
-
-.grid {
-  display: grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
-  gap: 14px;
-}
-
-
-/* =========================
-   INPUT
-========================= */
-
-.input-group {
-  margin-bottom: 13px;
-}
-
-
-label {
-  display: block;
-
-  font-size: 12px;
-
-  font-weight: 800;
-
-  color: #475569;
-
-  margin-bottom: 6px;
-}
-
-
-input,
-textarea,
-select {
-  width: 100%;
-
-  border: 1px solid #e2e8f0;
-
-  background: #f8fafc;
-
-  color: var(--text);
-
-  border-radius: 11px;
-
-  padding: 12px;
-
-  font-size: 14px;
-
-  outline: none;
-
-  transition: .2s;
-}
-
-
-input:focus,
-textarea:focus,
-select:focus {
-  background: white;
-
-  border-color:
-    var(--blue);
-
-  box-shadow:
-    0 0 0 3px
-    rgba(37,99,235,.1);
-}
-
-
-textarea {
-  min-height: 85px;
-
-  resize: vertical;
-}
-
-
-/* =========================
-   ITEMS
-========================= */
-
-.item-heading {
-  justify-content: space-between;
-}
-
-
-.section-left {
-  display: flex;
-
-  align-items: center;
-
-  gap: 12px;
-}
-
-
-.add-btn {
-  background:
-    var(--green);
-
-  color: white;
-
-  border: none;
-
-  padding: 10px 15px;
-
-  border-radius: 10px;
-
-  font-weight: 800;
-
-  cursor: pointer;
-
-  box-shadow:
-    0 5px 12px
-    rgba(22,163,74,.2);
-}
-
-
-.item {
-  background: #f8fafc;
-
-  border: 1px solid #e2e8f0;
-
-  border-radius: 14px;
-
-  padding: 14px;
-
-  margin-bottom: 12px;
-
-  animation:
-    slideIn .25s ease;
-}
-
-
-@keyframes slideIn {
-
-  from {
-    opacity: 0;
-
-    transform:
-      translateY(8px);
-  }
-
-  to {
-    opacity: 1;
-
-    transform:
-      translateY(0);
-  }
-
-}
-
-
-.item-grid {
-  display: grid;
-
-  grid-template-columns:
-    2fr 1fr 1fr;
-
-  gap: 10px;
-}
-
-
-.remove-btn {
-  margin-top: 10px;
-
-  border: none;
-
-  background: #fee2e2;
-
-  color: var(--red);
-
-  padding: 7px 11px;
-
-  border-radius: 8px;
-
-  font-size: 12px;
-
-  font-weight: 800;
-}
-
-
-/* =========================
-   SUMMARY
-========================= */
-
-.summary-card {
-  background:
-    linear-gradient(
-      145deg,
-      #0f172a,
-      #1e293b
+  const discount =
+    parseFloat(
+      document.getElementById(
+        "discount"
+      )?.value
+    ) || 0;
+
+
+  const paid =
+    parseFloat(
+      document.getElementById(
+        "paid"
+      )?.value
+    ) || 0;
+
+
+  const total =
+    Math.max(
+      0,
+      subtotal - discount
     );
 
-  color: white;
 
-  border-radius: 20px;
-
-  padding: 20px;
-
-  margin-bottom: 16px;
-
-  box-shadow:
-    0 12px 25px
-    rgba(15,23,42,.18);
-}
-
-
-.summary-title {
-  display: flex;
-
-  align-items: center;
-
-  gap: 9px;
-
-  margin-bottom: 17px;
-}
-
-
-.summary-title h2 {
-  font-size: 17px;
-}
-
-
-.summary-row,
-.discount-row,
-.total-row,
-.paid-row {
-  display: flex;
-
-  justify-content: space-between;
-
-  align-items: center;
-
-  padding: 9px 0;
-}
-
-
-.summary-row span,
-.discount-row span,
-.paid-row span {
-  color: #cbd5e1;
-
-  font-size: 13px;
-}
-
-
-.discount-row input,
-.paid-row input {
-  width: 130px;
-
-  background:
-    rgba(255,255,255,.1);
-
-  border:
-    1px solid
-    rgba(255,255,255,.15);
-
-  color: white;
-
-  text-align: right;
-}
-
-
-.total-row {
-  border-top:
-    1px solid
-    rgba(255,255,255,.12);
-
-  border-bottom:
-    1px solid
-    rgba(255,255,255,.12);
-
-  margin-top: 5px;
-
-  padding: 15px 0;
-}
-
-
-.total-row span {
-  font-size: 15px;
-
-  font-weight: 800;
-}
-
-
-.total-row strong {
-  color: #60a5fa;
-
-  font-size: 23px;
-}
-
-
-.due-row {
-  background:
-    rgba(249,115,22,.12);
-
-  border:
-    1px solid
-    rgba(249,115,22,.25);
-
-  border-radius: 12px;
-
-  padding: 13px;
-
-  display: flex;
-
-  justify-content: space-between;
-
-  align-items: center;
-
-  margin-top: 10px;
-}
-
-
-.due-row span {
-  display: block;
-
-  font-weight: 800;
-}
-
-
-.due-row small {
-  color: #94a3b8;
-
-  font-size: 10px;
-}
-
-
-.due-row strong {
-  color: #fb923c;
-
-  font-size: 20px;
-}
-
-
-/* =========================
-   ACTIONS
-========================= */
-
-.action-area {
-  display: grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
-  gap: 11px;
-
-  margin: 5px 0 25px;
-}
-
-
-.action-area button {
-  border: none;
-
-  padding: 15px;
-
-  border-radius: 13px;
-
-  color: white;
-
-  font-size: 13px;
-
-  font-weight: 800;
-
-  cursor: pointer;
-
-  display: flex;
-
-  justify-content: center;
-
-  align-items: center;
-
-  gap: 8px;
-
-  transition: .2s;
-}
-
-
-.action-area button:active {
-  transform:
-    scale(.97);
-}
-
-
-.primary-action {
-  background:
-    linear-gradient(
-      135deg,
-      #7c3aed,
-      #6366f1
+  const due =
+    Math.max(
+      0,
+      total - paid
     );
+
+
+  document.getElementById(
+    "subtotal"
+  ).textContent =
+    subtotal.toFixed(2);
+
+
+  document.getElementById(
+    "total"
+  ).textContent =
+    total.toFixed(2);
+
+
+  document.getElementById(
+    "due"
+  ).textContent =
+    due.toFixed(2);
+
 }
 
 
-.whatsapp-action {
-  background:
-    linear-gradient(
-      135deg,
-      #16a34a,
-      #22c55e
+// ==========================================
+// DISCOUNT / PAID EVENTS
+// ==========================================
+
+document.addEventListener(
+  "input",
+  function (event) {
+
+    if (
+      event.target.id ===
+      "discount" ||
+
+      event.target.id ===
+      "paid"
+    ) {
+
+      calculateTotal();
+
+    }
+
+  }
+);
+
+
+// ==========================================
+// GET DATA
+// ==========================================
+
+function getInvoiceData() {
+
+  const items = [];
+
+
+  document
+    .querySelectorAll(".item")
+    .forEach(
+      function (item) {
+
+        const name =
+          item.querySelector(
+            ".item-name"
+          ).value.trim();
+
+
+        const qty =
+          parseFloat(
+            item.querySelector(
+              ".item-qty"
+            ).value
+          ) || 0;
+
+
+        const rate =
+          parseFloat(
+            item.querySelector(
+              ".item-rate"
+            ).value
+          ) || 0;
+
+
+        items.push({
+
+          name: name,
+
+          qty: qty,
+
+          rate: rate,
+
+          amount:
+            qty * rate
+
+        });
+
+      }
     );
+
+
+  return {
+
+    invoiceNo:
+      document.getElementById(
+        "invoiceNo"
+      ).value,
+
+    date:
+      document.getElementById(
+        "date"
+      ).value,
+
+    customerName:
+      document.getElementById(
+        "customerName"
+      ).value,
+
+    customerPhone:
+      document.getElementById(
+        "customerPhone"
+      ).value,
+
+    customerAddress:
+      document.getElementById(
+        "customerAddress"
+      ).value,
+
+    items: items,
+
+    subtotal:
+      parseFloat(
+        document.getElementById(
+          "subtotal"
+        ).textContent
+      ) || 0,
+
+    discount:
+      parseFloat(
+        document.getElementById(
+          "discount"
+        ).value
+      ) || 0,
+
+    total:
+      parseFloat(
+        document.getElementById(
+          "total"
+        ).textContent
+      ) || 0,
+
+    paid:
+      parseFloat(
+        document.getElementById(
+          "paid"
+        ).value
+      ) || 0,
+
+    due:
+      parseFloat(
+        document.getElementById(
+          "due"
+        ).textContent
+      ) || 0,
+
+    paymentStatus:
+      document.getElementById(
+        "paymentStatus"
+      ).value,
+
+    notes:
+      document.getElementById(
+        "notes"
+      ).value
+
+  };
+
 }
 
 
-.save-action {
-  background:
-    linear-gradient(
-      135deg,
-      #2563eb,
-      #3b82f6
+// ==========================================
+// SAVE
+// ==========================================
+
+function saveInvoice() {
+
+  const invoice =
+    getInvoiceData();
+
+
+  let invoices =
+    JSON.parse(
+      localStorage.getItem(
+        "parbezWorksInvoices"
+      )
+    ) || [];
+
+
+  invoices.push(invoice);
+
+
+  localStorage.setItem(
+    "parbezWorksInvoices",
+    JSON.stringify(
+      invoices
+    )
+  );
+
+
+  alert(
+    "Invoice saved successfully! ✅"
+  );
+
+}
+
+
+// ==========================================
+// WHATSAPP
+// ==========================================
+
+function sendWhatsApp() {
+
+  const invoice =
+    getInvoiceData();
+
+
+  const phone =
+    invoice.customerPhone
+      .replace(
+        /\D/g,
+        ""
+      );
+
+
+  if (!phone) {
+
+    alert(
+      "Enter customer phone number first."
     );
-}
 
+    return;
 
-.clear-action {
-  background:
-    #ef4444;
-}
-
-
-/* =========================
-   FOOTER
-========================= */
-
-footer {
-  text-align: center;
-
-  background: #0f172a;
-
-  color: #cbd5e1;
-
-  padding: 30px 15px;
-}
-
-
-.footer-logo {
-  width: 42px;
-
-  height: 42px;
-
-  margin:
-    0 auto 8px;
-
-  background:
-    #2563eb;
-
-  color: white;
-
-  border-radius: 12px;
-
-  display: flex;
-
-  justify-content: center;
-
-  align-items: center;
-
-  font-weight: 900;
-}
-
-
-footer strong {
-  color: white;
-
-  font-size: 15px;
-}
-
-
-footer p {
-  font-size: 11px;
-
-  margin: 5px 0 12px;
-}
-
-
-footer small {
-  font-size: 10px;
-
-  color: #64748b;
-}
-
-
-/* =========================
-   MOBILE
-========================= */
-
-@media (max-width: 600px) {
-
-  .grid,
-  .item-grid {
-    grid-template-columns:
-      1fr;
   }
 
 
-  .welcome {
-    padding: 20px;
+  let message =
+    "PARBEZ WORKS\n\n";
+
+
+  message +=
+    "Invoice: " +
+    (invoice.invoiceNo || "N/A") +
+    "\n";
+
+
+  message +=
+    "Date: " +
+    (invoice.date || "N/A") +
+    "\n\n";
+
+
+  message +=
+    "Customer: " +
+    (invoice.customerName || "N/A") +
+    "\n";
+
+
+  message +=
+    "Address: " +
+    (invoice.customerAddress || "N/A") +
+    "\n\n";
+
+
+  message +=
+    "WORK DETAILS\n";
+
+
+  invoice.items.forEach(
+    function (item) {
+
+      message +=
+        (item.name || "Item") +
+        " - " +
+        item.qty +
+        " × ₹" +
+        item.rate +
+        " = ₹" +
+        item.amount +
+        "\n";
+
+    }
+  );
+
+
+  message +=
+    "\nSubtotal: ₹" +
+    invoice.subtotal.toFixed(2);
+
+
+  message +=
+    "\nDiscount: ₹" +
+    invoice.discount.toFixed(2);
+
+
+  message +=
+    "\nTotal: ₹" +
+    invoice.total.toFixed(2);
+
+
+  message +=
+    "\nPaid: ₹" +
+    invoice.paid.toFixed(2);
+
+
+  message +=
+    "\nDue: ₹" +
+    invoice.due.toFixed(2);
+
+
+  message +=
+    "\nStatus: " +
+    invoice.paymentStatus;
+
+
+  if (invoice.notes) {
+
+    message +=
+      "\n\nNote: " +
+      invoice.notes;
+
   }
 
 
-  .welcome h2 {
-    font-size: 21px;
-  }
+  const url =
+    "https://wa.me/" +
+    phone +
+    "?text=" +
+    encodeURIComponent(
+      message
+    );
 
 
-  .welcome-icon {
-    width: 58px;
-
-    height: 58px;
-
-    font-size: 32px;
-  }
-
-
-  .card {
-    padding: 16px;
-  }
-
-
-  .action-area {
-    grid-template-columns:
-      1fr 1fr;
-  }
+  window.open(
+    url,
+    "_blank"
+  );
 
 }
 
 
-@media (max-width: 380px) {
+// ==========================================
+// DOWNLOAD BILL IMAGE
+// ==========================================
 
-  .action-area {
-    grid-template-columns:
-      1fr;
+function downloadBillImage() {
+
+  const invoice =
+    getInvoiceData();
+
+
+  if (!invoice.customerName) {
+
+    alert(
+      "Enter customer name first."
+    );
+
+    return;
+
   }
+
+
+  if (
+    typeof html2canvas ===
+    "undefined"
+  ) {
+
+    alert(
+      "Image library could not load. Check internet and refresh."
+    );
+
+    return;
+
+  }
+
+
+  const bill =
+    document.createElement(
+      "div"
+    );
+
+
+  bill.style.width =
+    "700px";
+
+  bill.style.padding =
+    "35px";
+
+  bill.style.background =
+    "#ffffff";
+
+  bill.style.color =
+    "#0f172a";
+
+  bill.style.fontFamily =
+    "Arial, sans-serif";
+
+  bill.style.position =
+    "fixed";
+
+  bill.style.left =
+    "-10000px";
+
+  bill.style.top =
+    "0";
+
+
+  let rows = "";
+
+
+  invoice.items.forEach(
+    function (item) {
+
+      rows += `
+
+        <tr>
+
+          <td style="
+            padding:10px;
+            border:1px solid #ddd;
+          ">
+            ${item.name || "Item"}
+          </td>
+
+          <td style="
+            padding:10px;
+            border:1px solid #ddd;
+            text-align:center;
+          ">
+            ${item.qty}
+          </td>
+
+          <td style="
+            padding:10px;
+            border:1px solid #ddd;
+            text-align:right;
+          ">
+            ₹${item.rate.toFixed(2)}
+          </td>
+
+          <td style="
+            padding:10px;
+            border:1px solid #ddd;
+            text-align:right;
+          ">
+            ₹${item.amount.toFixed(2)}
+          </td>
+
+        </tr>
+
+      `;
+
+    }
+  );
+
+
+  bill.innerHTML = `
+
+    <div style="
+      background:#0f172a;
+      color:white;
+      padding:22px;
+      border-radius:12px;
+      text-align:center;
+    ">
+
+      <h1 style="
+        margin:0;
+        font-size:30px;
+      ">
+        PARBEZ WORKS
+      </h1>
+
+      <p style="
+        margin:5px 0 0;
+      ">
+        Electrical • False Ceiling • Plumbing
+      </p>
+
+    </div>
+
+
+    <div style="
+      padding:20px 0;
+    ">
+
+      <p>
+        <b>Invoice:</b>
+        ${invoice.invoiceNo || "N/A"}
+      </p>
+
+      <p>
+        <b>Date:</b>
+        ${invoice.date || "N/A"}
+      </p>
+
+      <p>
+        <b>Customer:</b>
+        ${invoice.customerName}
+      </p>
+
+      <p>
+        <b>Phone:</b>
+        ${invoice.customerPhone || "N/A"}
+      </p>
+
+      <p>
+        <b>Address:</b>
+        ${invoice.customerAddress || "N/A"}
+      </p>
+
+    </div>
+
+
+    <table style="
+      width:100%;
+      border-collapse:collapse;
+    ">
+
+      <thead>
+
+        <tr style="
+          background:#eff6ff;
+        ">
+
+          <th style="
+            padding:10px;
+            border:1px solid #ddd;
+            text-align:left;
+          ">
+            Work
+          </th>
+
+          <th style="
+            padding:10px;
+            border:1px solid #ddd;
+          ">
+            Qty
+          </th>
+
+          <th style="
+            padding:10px;
+            border:1px solid #ddd;
+          ">
+            Rate
+          </th>
+
+          <th style="
+            padding:10px;
+            border:1px solid #ddd;
+          ">
+            Amount
+          </th>
+
+        </tr>
+
+      </thead>
+
+      <tbody>
+        ${rows}
+      </tbody>
+
+    </table>
+
+
+    <div style="
+      text-align:right;
+      margin-top:22px;
+    ">
+
+      <p>
+        Subtotal:
+        <b>₹${invoice.subtotal.toFixed(2)}</b>
+      </p>
+
+      <p>
+        Discount:
+        <b>₹${invoice.discount.toFixed(2)}</b>
+      </p>
+
+      <h2 style="
+        color:#2563eb;
+      ">
+        Total:
+        ₹${invoice.total.toFixed(2)}
+      </h2>
+
+      <p>
+        Paid:
+        <b>₹${invoice.paid.toFixed(2)}</b>
+      </p>
+
+      <h2 style="
+        color:#ea580c;
+      ">
+        Due:
+        ₹${invoice.due.toFixed(2)}
+      </h2>
+
+    </div>
+
+
+    <div style="
+      margin-top:25px;
+      padding-top:15px;
+      border-top:1px solid #ddd;
+    ">
+
+      <p>
+        <b>Payment Status:</b>
+        ${invoice.paymentStatus}
+      </p>
+
+      ${
+        invoice.notes
+          ? `
+            <p style="margin-top:8px;">
+              <b>Note:</b>
+              ${invoice.notes}
+            </p>
+          `
+          : ""
+      }
+
+    </div>
+
+
+    <p style="
+      text-align:center;
+      margin-top:30px;
+      color:#64748b;
+    ">
+      Thank you for choosing Parbez Works
+    </p>
+
+  `;
+
+
+  document.body.appendChild(
+    bill
+  );
+
+
+  html2canvas(
+    bill,
+    {
+      scale: 2,
+      backgroundColor: "#ffffff"
+    }
+  )
+  .then(
+    function (canvas) {
+
+      const link =
+        document.createElement(
+          "a"
+        );
+
+
+      link.download =
+        "Parbez-Works-" +
+        (
+          invoice.invoiceNo ||
+          "Bill"
+        ) +
+        ".png";
+
+
+      link.href =
+        canvas.toDataURL(
+          "image/png"
+        );
+
+
+      link.click();
+
+
+      bill.remove();
+
+    }
+  )
+  .catch(
+    function (error) {
+
+      console.error(error);
+
+      bill.remove();
+
+      alert(
+        "Could not create bill image."
+      );
+
+    }
+  );
 
 }
 
 
-/* =========================
-   PRINT
-========================= */
+// ==========================================
+// CLEAR
+// ==========================================
 
-@media print {
+function clearInvoice() {
 
-  body {
-    background: white;
+  if (
+    !confirm(
+      "Clear this invoice?"
+    )
+  ) {
+
+    return;
+
   }
 
 
-  .topbar {
-    position: static;
-
-    background: white;
-
-    color: black;
-
-    box-shadow: none;
-  }
+  document.getElementById(
+    "invoiceNo"
+  ).value = "";
 
 
-  .print-btn,
-  .welcome,
-  .action-area,
-  footer,
-  .add-btn,
-  .remove-btn {
-    display: none !important;
-  }
+  document.getElementById(
+    "customerName"
+  ).value = "";
 
 
-  main {
-    max-width: 100%;
-
-    padding: 0;
-  }
+  document.getElementById(
+    "customerPhone"
+  ).value = "";
 
 
-  .card,
-  .summary-card {
-    box-shadow: none;
+  document.getElementById(
+    "customerAddress"
+  ).value = "";
 
-    break-inside: avoid;
-  }
 
-}
+  document.getElementById(
+    "discount"
+  ).value = 0;
+
+
+  document.getElementById(
+    "paid"
+  ).value = 0;
+
+
+  document.getElementById(
+    "paymentStatus"
+  ).value =
+    "Pending";
+
+
+  document.getElementById(
+    "notes"
+  ).value = "";
+
+
+  document.getElementById(
+    "items"
+  ).innerHTML = "";
+
+
+  itemCount = 0;
+
+
+  addItem();
+
+
+  document.getElementById(
+    "date"
+  ).valueAsDate =
+    new Date();
+
+
+  calculateTotal();
+
+    }
