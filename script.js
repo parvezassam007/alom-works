@@ -1,24 +1,22 @@
 let itemCount = 0;
 
-
 // =========================================
 // PAGE LOAD
 // =========================================
 
 document.addEventListener("DOMContentLoaded", function () {
 
-  setTodayDate();
+setTodayDate();
 
-  const items = document.getElementById("items");
+const items = document.getElementById("items");
 
-  if (items && items.children.length === 0) {
-    addItem();
-  }
+if (items && items.children.length === 0) {
+addItem();
+}
 
-  calculateTotal();
+calculateTotal();
 
 });
-
 
 // =========================================
 // TODAY'S DATE
@@ -26,28 +24,27 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function setTodayDate() {
 
-  const dateInput =
-    document.getElementById("date");
+const dateInput =
+document.getElementById("date");
 
-  if (!dateInput) return;
+if (!dateInput) return;
 
-  const today = new Date();
+const today = new Date();
 
-  const yyyy =
-    today.getFullYear();
+const yyyy =
+today.getFullYear();
 
-  const mm =
-    String(today.getMonth() + 1)
-      .padStart(2, "0");
+const mm =
+String(today.getMonth() + 1)
+.padStart(2, "0");
 
-  const dd =
-    String(today.getDate())
-      .padStart(2, "0");
+const dd =
+String(today.getDate())
+.padStart(2, "0");
 
-  dateInput.value =
-    `${yyyy}-${mm}-${dd}`;
+dateInput.value =
+"${yyyy}-${mm}-${dd}";
 }
-
 
 // =========================================
 // ADD ITEM
@@ -55,74 +52,83 @@ function setTodayDate() {
 
 function addItem() {
 
-  const items =
-    document.getElementById("items");
+const items =
+document.getElementById("items");
 
-  if (!items) return;
+if (!items) return;
 
-  itemCount++;
+itemCount++;
 
-  const item =
-    document.createElement("div");
+const item =
+document.createElement("div");
 
-  item.className = "item";
+item.className = "item";
 
-  item.innerHTML = `
-    <div class="item-grid">
+item.innerHTML = `
+<div class="item-grid">
 
-      <div>
-        <label>Work / Item</label>
+  <div>
+    <label>Work / Item</label>
 
-        <input
-          type="text"
-          class="item-name"
-          placeholder="Example: Fan installation">
-      </div>
+    <input
+      type="text"
+      class="item-name"
+      placeholder="Example: Fan installation">
+  </div>
 
-      <div>
-        <label>Qty</label>
 
-        <input
-          type="number"
-          class="item-qty"
-          value="1"
-          min="0"
-          oninput="calculateTotal()">
-      </div>
+  <div>
+    <label>Qty</label>
 
-      <div>
-        <label>Rate (₹)</label>
+    <input
+      type="number"
+      class="item-qty"
+      value="1"
+      min="0"
+      step="any"
+      oninput="calculateTotal()">
+  </div>
 
-        <input
-          type="number"
-          class="item-rate"
-          value="0"
-          min="0"
-          oninput="calculateTotal()">
-      </div>
 
-      <button
-        type="button"
-        class="remove-btn no-print"
-        onclick="removeItem(this)">
-        ✕
-      </button>
+  <div>
+    <label>Rate (₹)</label>
 
-    </div>
+    <input
+      type="number"
+      class="item-rate"
+      value="0"
+      min="0"
+      step="any"
+      oninput="calculateTotal()">
+  </div>
 
-    <div style="text-align:right;margin-top:10px;">
-      Amount:
-      <strong>
-        ₹<span class="item-amount">0.00</span>
-      </strong>
-    </div>
-  `;
 
-  items.appendChild(item);
+  <button
+    type="button"
+    class="remove-btn no-print"
+    onclick="removeItem(this)">
+    ✕
+  </button>
 
-  calculateTotal();
+</div>
+
+
+<div style="text-align:right;margin-top:10px;">
+
+  Amount:
+
+  <strong>
+    ₹<span class="item-amount">0.00</span>
+  </strong>
+
+</div>
+
+`;
+
+items.appendChild(item);
+
+calculateTotal();
 }
-
 
 // =========================================
 // REMOVE ITEM
@@ -130,16 +136,15 @@ function addItem() {
 
 function removeItem(button) {
 
-  const item =
-    button.closest(".item");
+const item =
+button.closest(".item");
 
-  if (item) {
-    item.remove();
-  }
-
-  calculateTotal();
+if (item) {
+item.remove();
 }
 
+calculateTotal();
+}
 
 // =========================================
 // CALCULATE TOTAL
@@ -147,103 +152,97 @@ function removeItem(button) {
 
 function calculateTotal() {
 
-  let subtotal = 0;
+let subtotal = 0;
 
-  const items =
-    document.querySelectorAll(".item");
+document
+.querySelectorAll(".item")
+.forEach(function (item) {
 
-
-  items.forEach(function (item) {
-
-    const qtyInput =
-      item.querySelector(".item-qty");
-
-    const rateInput =
-      item.querySelector(".item-rate");
-
-    const amountElement =
-      item.querySelector(".item-amount");
-
-
-    const qty =
-      parseFloat(qtyInput?.value) || 0;
-
-    const rate =
-      parseFloat(rateInput?.value) || 0;
-
-
-    const amount =
-      qty * rate;
-
-
-    if (amountElement) {
-
-      amountElement.textContent =
-        amount.toFixed(2);
-
-    }
-
-
-    subtotal += amount;
-
-  });
-
-
-  const discount =
+  const qty =
     parseFloat(
-      document.getElementById("discount")?.value
+      item.querySelector(".item-qty")?.value
     ) || 0;
 
 
-  const paid =
+  const rate =
     parseFloat(
-      document.getElementById("paid")?.value
+      item.querySelector(".item-rate")?.value
     ) || 0;
 
 
-  const total =
-    Math.max(0, subtotal - discount);
+  const amount =
+    qty * rate;
 
 
-  const due =
-    Math.max(0, total - paid);
+  const amountElement =
+    item.querySelector(".item-amount");
 
 
-  const subtotalElement =
-    document.getElementById("subtotal");
+  if (amountElement) {
 
-  const totalElement =
-    document.getElementById("total");
-
-  const dueElement =
-    document.getElementById("due");
-
-
-  if (subtotalElement) {
-
-    subtotalElement.textContent =
-      subtotal.toFixed(2);
+    amountElement.textContent =
+      amount.toFixed(2);
 
   }
 
 
-  if (totalElement) {
+  subtotal += amount;
 
-    totalElement.textContent =
-      total.toFixed(2);
+});
 
-  }
+const discount =
+parseFloat(
+document.getElementById("discount")?.value
+) || 0;
 
+const paid =
+parseFloat(
+document.getElementById("paid")?.value
+) || 0;
 
-  if (dueElement) {
+const total =
+Math.max(
+0,
+subtotal - discount
+);
 
-    dueElement.textContent =
-      due.toFixed(2);
+const due =
+Math.max(
+0,
+total - paid
+);
 
-  }
+const subtotalElement =
+document.getElementById("subtotal");
+
+const totalElement =
+document.getElementById("total");
+
+const dueElement =
+document.getElementById("due");
+
+if (subtotalElement) {
+
+subtotalElement.textContent =
+  subtotal.toFixed(2);
 
 }
 
+if (totalElement) {
+
+totalElement.textContent =
+  total.toFixed(2);
+
+}
+
+if (dueElement) {
+
+dueElement.textContent =
+  due.toFixed(2);
+
+}
+
+}
 
 // =========================================
 // SAVE INVOICE
@@ -251,268 +250,285 @@ function calculateTotal() {
 
 function saveInvoice() {
 
-  const invoice = {
+calculateTotal();
 
-    invoiceNo:
-      document
-        .getElementById("invoiceNo")
-        ?.value
-        .trim() || "",
+const invoice = {
 
-
-    date:
-      document
-        .getElementById("date")
-        ?.value || "",
-
-
-    customerName:
-      document
-        .getElementById("customerName")
-        ?.value
-        .trim() || "",
-
-
-    customerPhone:
-      document
-        .getElementById("customerPhone")
-        ?.value
-        .trim() || "",
-
-
-    customerAddress:
-      document
-        .getElementById("customerAddress")
-        ?.value
-        .trim() || "",
-
-
-    discount:
-      document
-        .getElementById("discount")
-        ?.value || "0",
-
-
-    paid:
-      document
-        .getElementById("paid")
-        ?.value || "0",
-
-
-    paymentStatus:
-      document
-        .getElementById("paymentStatus")
-        ?.value || "Pending",
-
-
-    notes:
-      document
-        .getElementById("notes")
-        ?.value
-        .trim() || "",
-
-
-    total:
-      document
-        .getElementById("total")
-        ?.textContent || "0.00",
-
-
-    due:
-      document
-        .getElementById("due")
-        ?.textContent || "0.00",
-
-
-    items: []
-
-  };
-
-
+invoiceNo:
   document
-    .querySelectorAll(".item")
-    .forEach(function (item) {
-
-      invoice.items.push({
-
-        name:
-          item
-            .querySelector(".item-name")
-            ?.value
-            .trim() || "",
+    .getElementById("invoiceNo")
+    ?.value
+    .trim() || "",
 
 
-        qty:
-          item
-            .querySelector(".item-qty")
-            ?.value || "0",
+date:
+  document
+    .getElementById("date")
+    ?.value || "",
 
 
-        rate:
-          item
-            .querySelector(".item-rate")
-            ?.value || "0",
+customerName:
+  document
+    .getElementById("customerName")
+    ?.value
+    .trim() || "",
 
 
-        amount:
-          item
-            .querySelector(".item-amount")
-            ?.textContent || "0.00"
-
-      });
-
-    });
+customerPhone:
+  document
+    .getElementById("customerPhone")
+    ?.value
+    .trim() || "",
 
 
-  localStorage.setItem(
-    "parbezWorksInvoice",
-    JSON.stringify(invoice)
-  );
+customerAddress:
+  document
+    .getElementById("customerAddress")
+    ?.value
+    .trim() || "",
 
 
-  alert(
-    "Invoice saved successfully!"
-  );
+discount:
+  document
+    .getElementById("discount")
+    ?.value || "0",
+
+
+paid:
+  document
+    .getElementById("paid")
+    ?.value || "0",
+
+
+paymentStatus:
+  document
+    .getElementById("paymentStatus")
+    ?.value || "Pending",
+
+
+notes:
+  document
+    .getElementById("notes")
+    ?.value
+    .trim() || "",
+
+
+subtotal:
+  document
+    .getElementById("subtotal")
+    ?.textContent || "0.00",
+
+
+total:
+  document
+    .getElementById("total")
+    ?.textContent || "0.00",
+
+
+due:
+  document
+    .getElementById("due")
+    ?.textContent || "0.00",
+
+
+items: []
+
+};
+
+document
+.querySelectorAll(".item")
+.forEach(function (item) {
+
+  invoice.items.push({
+
+    name:
+      item
+        .querySelector(".item-name")
+        ?.value
+        .trim() || "",
+
+
+    qty:
+      item
+        .querySelector(".item-qty")
+        ?.value || "0",
+
+
+    rate:
+      item
+        .querySelector(".item-rate")
+        ?.value || "0",
+
+
+    amount:
+      item
+        .querySelector(".item-amount")
+        ?.textContent || "0.00"
+
+  });
+
+});
+
+localStorage.setItem(
+"parbezWorksInvoice",
+JSON.stringify(invoice)
+);
+
+alert(
+"Invoice saved successfully!"
+);
 
 }
 
-
 // =========================================
-// DOWNLOAD BILL JPG
+// DOWNLOAD BILL PNG
 // =========================================
 
 async function downloadBillJPG() {
 
-  const bill =
-    document.getElementById("billArea");
+const bill =
+document.getElementById("billArea");
 
+if (!bill) {
 
-  if (!bill) {
+alert(
+  "Bill area nahi mila."
+);
 
-    alert(
-      "Bill area nahi mila."
-    );
+return;
 
-    return;
-  }
+}
 
+if (
+typeof html2canvas ===
+"undefined"
+) {
 
-  if (
-    typeof html2canvas ===
-    "undefined"
-  ) {
+alert(
+  "PNG feature load nahi hua. Internet ON karke page reload karo."
+);
 
-    alert(
-      "JPG feature load nahi hua. Internet ON karke page reload karo."
-    );
+return;
 
-    return;
-  }
+}
 
+calculateTotal();
 
-  const invoiceNo =
-    document
-      .getElementById("invoiceNo")
-      ?.value
-      .trim() || "PW-BILL";
+const invoiceNo =
+document
+.getElementById("invoiceNo")
+?.value
+.trim() || "PW-BILL";
 
+// Export mode ON
+bill.classList.add(
+"export-mode"
+);
 
-  bill.classList.add(
-    "export-mode"
-  );
+// Browser ko CSS apply karne ka time
+await new Promise(
+function (resolve) {
 
+  requestAnimationFrame(
+    function () {
 
-  await new Promise(
-    function (resolve) {
-
-      setTimeout(
-        resolve,
-        300
+      requestAnimationFrame(
+        resolve
       );
 
     }
   );
 
+}
 
-  try {
+);
 
-    const canvas =
-      await html2canvas(
-        bill,
-        {
+try {
 
-          scale: 2,
+const canvas =
+  await html2canvas(
+    bill,
+    {
 
-          useCORS: true,
+      scale: 3,
 
-          allowTaint: false,
+      useCORS: true,
 
-          backgroundColor:
-            "#ffffff",
+      allowTaint: false,
 
-          scrollX: 0,
+      backgroundColor:
+        "#ffffff",
 
-          scrollY:
-            -window.scrollY
+      logging: false,
 
-        }
-      );
+      imageTimeout: 15000,
 
+      scrollX: 0,
 
-    const image =
-      canvas.toDataURL(
-        "image/jpeg",
-        0.95
-      );
+      scrollY: 0,
 
+      windowWidth:
+        bill.scrollWidth,
 
-    const link =
-      document.createElement("a");
+      windowHeight:
+        bill.scrollHeight
 
-
-    link.href = image;
+    }
+  );
 
 
-    link.download =
-      `${invoiceNo}-Bill.jpg`;
+// PNG
+const image =
+  canvas.toDataURL(
+    "image/png"
+  );
 
 
-    document.body.appendChild(
-      link
-    );
+const link =
+  document.createElement("a");
 
 
-    link.click();
+link.href =
+  image;
 
 
-    document.body.removeChild(
-      link
-    );
+link.download =
+  `${invoiceNo}-Bill.png`;
 
 
-  } catch (error) {
-
-    console.error(
-      "JPG Error:",
-      error
-    );
+document.body.appendChild(
+  link
+);
 
 
-    alert(
-      "Bill JPG banane mein problem hui."
-    );
+link.click();
 
 
-  } finally {
+document.body.removeChild(
+  link
+);
 
-    bill.classList.remove(
-      "export-mode"
-    );
+} catch (error) {
 
-  }
+console.error(
+  "PNG Error:",
+  error
+);
+
+
+alert(
+  "Bill PNG banane mein problem hui."
+);
+
+} finally {
+
+bill.classList.remove(
+  "export-mode"
+);
 
 }
 
+}
 
 // =========================================
 // WHATSAPP
@@ -520,145 +536,153 @@ async function downloadBillJPG() {
 
 function sendWhatsApp() {
 
-  const phone =
-    document
-      .getElementById("customerPhone")
+calculateTotal();
+
+// =========================================
+// CUSTOMER DETAILS
+// =========================================
+
+const phone =
+document
+.getElementById("customerPhone")
+?.value
+.trim() || "";
+
+const name =
+document
+.getElementById("customerName")
+?.value
+.trim() || "Customer";
+
+const invoiceNo =
+document
+.getElementById("invoiceNo")
+?.value
+.trim() || "N/A";
+
+const invoiceDate =
+document
+.getElementById("date")
+?.value || "";
+
+const address =
+document
+.getElementById("customerAddress")
+?.value
+.trim() || "";
+
+// =========================================
+// BILL DETAILS
+// =========================================
+
+const subtotal =
+document
+.getElementById("subtotal")
+?.textContent || "0.00";
+
+const discount =
+document
+.getElementById("discount")
+?.value || "0";
+
+const total =
+document
+.getElementById("total")
+?.textContent || "0.00";
+
+const paid =
+document
+.getElementById("paid")
+?.value || "0";
+
+const due =
+document
+.getElementById("due")
+?.textContent || "0.00";
+
+const paymentStatus =
+document
+.getElementById("paymentStatus")
+?.value || "Pending";
+
+const notes =
+document
+.getElementById("notes")
+?.value
+.trim() || "";
+
+// =========================================
+// DATE DD-MM-YYYY
+// =========================================
+
+let formattedDate = "N/A";
+
+if (invoiceDate) {
+
+const parts =
+  invoiceDate.split("-");
+
+
+if (parts.length === 3) {
+
+  formattedDate =
+    `${parts[2]}-${parts[1]}-${parts[0]}`;
+
+}
+
+}
+
+// =========================================
+// ITEMS
+// =========================================
+
+let itemText = "";
+
+document
+.querySelectorAll(".item")
+.forEach(function (item, index) {
+
+  const itemName =
+    item
+      .querySelector(".item-name")
       ?.value
-      .trim() || "";
+      .trim() || "Item";
 
 
-  const name =
-    document
-      .getElementById("customerName")
-      ?.value
-      .trim() || "Customer";
-
-
-  const invoiceNo =
-    document
-      .getElementById("invoiceNo")
-      ?.value
-      .trim() || "N/A";
-
-
-  const invoiceDate =
-    document
-      .getElementById("date")
-      ?.value || "";
-
-
-  const total =
-    document
-      .getElementById("total")
-      ?.textContent || "0.00";
-
-
-  const paid =
-    document
-      .getElementById("paid")
+  const qty =
+    item
+      .querySelector(".item-qty")
       ?.value || "0";
 
 
-  const due =
-    document
-      .getElementById("due")
+  const rate =
+    item
+      .querySelector(".item-rate")
+      ?.value || "0";
+
+
+  const amount =
+    item
+      .querySelector(".item-amount")
       ?.textContent || "0.00";
 
 
-  const address =
-    document
-      .getElementById("customerAddress")
-      ?.value
-      .trim() || "";
+  itemText +=
 
-
-  const paymentStatus =
-    document
-      .getElementById("paymentStatus")
-      ?.value || "Pending";
-
-
-  const notes =
-    document
-      .getElementById("notes")
-      ?.value
-      .trim() || "";
-
-
-  // =========================================
-  // DATE FORMAT
-  // =========================================
-
-  let formattedDate = "N/A";
-
-
-  if (invoiceDate) {
-
-    const parts =
-      invoiceDate.split("-");
-
-
-    if (parts.length === 3) {
-
-      formattedDate =
-        `${parts[2]}-${parts[1]}-${parts[0]}`;
-
-    }
-
-  }
-
-
-  // =========================================
-  // ITEMS
-  // =========================================
-
-  let itemText = "";
-
-
-  document
-    .querySelectorAll(".item")
-    .forEach(function (item, index) {
-
-
-      const itemName =
-        item
-          .querySelector(".item-name")
-          ?.value
-          .trim() || "Item";
-
-
-      const qty =
-        item
-          .querySelector(".item-qty")
-          ?.value || "0";
-
-
-      const rate =
-        item
-          .querySelector(".item-rate")
-          ?.value || "0";
-
-
-      const amount =
-        item
-          .querySelector(".item-amount")
-          ?.textContent || "0.00";
-
-
-      itemText +=
 `${index + 1}. ${itemName}
-Qty: ${qty} | Rate: ₹${rate} | Amount: ₹${amount}
+Qty: ${qty}
+Rate: ₹${rate}
+Amount: ₹${amount}
 
 `;
 
-    });
+});
 
+// =========================================
+// WHATSAPP MESSAGE
+// =========================================
 
-  // =========================================
-  // WHATSAPP MESSAGE
-  // =========================================
-
-  let message =
+let message =
 `PARBEZ WORKS
 
 Invoice No: ${invoiceNo}
@@ -666,108 +690,101 @@ Date: ${formattedDate}
 
 Customer: ${name}`;
 
+if (address) {
 
-  if (address) {
+message +=
 
-    message +=
-`
-Address: ${address}`;
+" Address: ${address}";
 
-  }
+}
 
-
-  message +=
+message +=
 `
 
 WORK / ITEMS
 
-${itemText}
+${itemText || "No items added."}
+
+Subtotal: ₹${subtotal}
+Discount: ₹${discount}
 Total: ₹${total}
 Paid: ₹${paid}
 Due: ₹${due}
 
 Payment Status: ${paymentStatus}`;
 
+if (notes) {
 
-  if (notes) {
+message +=
 
-    message +=
 `
 
 Note: ${notes}`;
 
-  }
+}
 
-
-  message +=
+message +=
 `
 
 Electrical • False Ceiling • Plumbing
 
 Thank you for choosing PARBEZ WORKS!`;
 
+// =========================================
+// PHONE NUMBER
+// =========================================
 
-  // =========================================
-  // PHONE NUMBER
-  // =========================================
+let cleanPhone =
+phone.replace(/\D/g, "");
 
-  let cleanPhone =
-    phone.replace(/\D/g, "");
+// 91XXXXXXXXXX
+if (
+cleanPhone.startsWith("91") &&
+cleanPhone.length === 12
+) {
 
-
-  // If user entered +91 number
-  if (
-    cleanPhone.startsWith("91") &&
-    cleanPhone.length === 12
-  ) {
-
-    // Already correct
-    cleanPhone = cleanPhone;
-
-  }
-
-  // Normal 10 digit Indian number
-  else if (
-    cleanPhone.length === 10
-  ) {
-
-    cleanPhone =
-      "91" + cleanPhone;
-
-  }
-
-  else {
-
-    alert(
-      "Customer ka 10 digit WhatsApp number enter karein."
-    );
-
-    return;
-
-  }
-
-
-  // =========================================
-  // OPEN DIRECT CUSTOMER CHAT
-  // =========================================
-
-  const encodedMessage =
-    encodeURIComponent(
-      message
-    );
-
-
-  const url =
-    `https://wa.me/${cleanPhone}?text=${encodedMessage}`;
-
-
-  window.open(
-    url,
-    "_blank"
-  );
+// Correct
 
 }
 
+// 10 digit Indian number
+else if (
+cleanPhone.length === 10
+) {
+
+cleanPhone =
+  "91" + cleanPhone;
+
+}
+
+else {
+
+alert(
+  "Customer ka 10 digit WhatsApp number enter karein."
+);
+
+return;
+
+}
+
+// =========================================
+// OPEN WHATSAPP
+// =========================================
+
+const encodedMessage =
+encodeURIComponent(
+message
+);
+
+const url =
+"https://wa.me/${cleanPhone}?text=${encodedMessage}";
+
+window.open(
+url,
+"_blank"
+);
+
+}
 
 // =========================================
 // CLEAR INVOICE
@@ -775,90 +792,69 @@ Thank you for choosing PARBEZ WORKS!`;
 
 function clearInvoice() {
 
-  const confirmClear =
-    confirm(
-      "Kya aap poora invoice clear karna chahte hain?"
-    );
+const confirmClear =
+confirm(
+"Kya aap poora invoice clear karna chahte hain?"
+);
 
+if (!confirmClear) {
+return;
+}
 
-  if (!confirmClear) {
-    return;
-  }
+document
+.getElementById("invoiceNo")
+.value = "";
 
+document
+.getElementById("customerName")
+.value = "";
 
-  document
-    .getElementById("invoiceNo")
-    .value = "";
+document
+.getElementById("customerPhone")
+.value = "";
 
+document
+.getElementById("customerAddress")
+.value = "";
 
-  document
-    .getElementById("customerName")
-    .value = "";
+document
+.getElementById("discount")
+.value = "0";
 
+document
+.getElementById("paid")
+.value = "0";
 
-  document
-    .getElementById("customerPhone")
-    .value = "";
+document
+.getElementById("paymentStatus")
+.value =
+"Pending";
 
+document
+.getElementById("notes")
+.value = "";
 
-  document
-    .getElementById("customerAddress")
-    .value = "";
+// Today's date
+setTodayDate();
 
+// Clear items
+const items =
+document.getElementById("items");
 
-  document
-    .getElementById("discount")
-    .value = "0";
+if (items) {
+items.innerHTML = "";
+}
 
+itemCount = 0;
 
-  document
-    .getElementById("paid")
-    .value = "0";
+// Add first item
+addItem();
 
+calculateTotal();
 
-  document
-    .getElementById("paymentStatus")
-    .value = "Pending";
-
-
-  document
-    .getElementById("notes")
-    .value = "";
-
-
-  // Reset date to today
-
-  setTodayDate();
-
-
-  // Clear items
-
-  const items =
-    document.getElementById("items");
-
-
-  if (items) {
-
-    items.innerHTML = "";
-
-  }
-
-
-  itemCount = 0;
-
-
-  // Add first item again
-
-  addItem();
-
-
-  calculateTotal();
-
-
-  // Remove saved invoice
-
-  localStorage.removeItem(
-    "parbezWorksInvoice"
-  );
+// Remove saved invoice
+localStorage.removeItem(
+"parbezWorksInvoice"
+);
 
 }
