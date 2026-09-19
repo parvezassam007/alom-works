@@ -7,6 +7,7 @@ const dateInput = document.getElementById("date");
 
 if (dateInput) {
 const today = new Date();
+
 const yyyy = today.getFullYear();
 const mm = String(today.getMonth() + 1).padStart(2, "0");
 const dd = String(today.getDate()).padStart(2, "0");
@@ -15,8 +16,14 @@ dateInput.value = `${yyyy}-${mm}-${dd}`;
 
 }
 
-// First item automatically
+// First item
+const items = document.getElementById("items");
+
+if (items && items.children.length === 0) {
 addItem();
+}
+
+calculateTotal();
 });
 
 // ==============================
@@ -29,6 +36,8 @@ itemCount++;
 
 const items = document.getElementById("items");
 
+if (!items) return;
+
 const item = document.createElement("div");
 
 item.className = "item";
@@ -40,6 +49,7 @@ item.innerHTML = `
     <label>Work / Item</label>
     <input
       class="item-name"
+      type="text"
       placeholder="Example: Fan installation"
     >
   </div>
@@ -115,39 +125,61 @@ const items = document.querySelectorAll(".item");
 
 items.forEach(function (item) {
 
-const qty =
-  parseFloat(item.querySelector(".item-qty").value) || 0;
+const qtyInput = item.querySelector(".item-qty");
+const rateInput = item.querySelector(".item-rate");
+const amountElement = item.querySelector(".item-amount");
 
-const rate =
-  parseFloat(item.querySelector(".item-rate").value) || 0;
+const qty = parseFloat(qtyInput?.value) || 0;
+const rate = parseFloat(rateInput?.value) || 0;
 
 const amount = qty * rate;
 
-item.querySelector(".item-amount").textContent =
-  amount.toFixed(2);
+if (amountElement) {
+  amountElement.textContent = amount.toFixed(2);
+}
 
 subtotal += amount;
 
 });
 
+const discountInput = document.getElementById("discount");
+const paidInput = document.getElementById("paid");
+
 const discount =
-parseFloat(document.getElementById("discount").value) || 0;
+parseFloat(discountInput?.value) || 0;
 
 const paid =
-parseFloat(document.getElementById("paid").value) || 0;
+parseFloat(paidInput?.value) || 0;
 
-const total = Math.max(0, subtotal - discount);
+const total =
+Math.max(0, subtotal - discount);
 
-const due = Math.max(0, total - paid);
+const due =
+Math.max(0, total - paid);
 
-document.getElementById("subtotal").textContent =
+const subtotalElement =
+document.getElementById("subtotal");
+
+const totalElement =
+document.getElementById("total");
+
+const dueElement =
+document.getElementById("due");
+
+if (subtotalElement) {
+subtotalElement.textContent =
 subtotal.toFixed(2);
+}
 
-document.getElementById("total").textContent =
+if (totalElement) {
+totalElement.textContent =
 total.toFixed(2);
+}
 
-document.getElementById("due").textContent =
+if (dueElement) {
+dueElement.textContent =
 due.toFixed(2);
+}
 }
 
 // ==============================
@@ -159,37 +191,37 @@ function saveInvoice() {
 const invoice = {
 
 invoiceNo:
-  document.getElementById("invoiceNo").value,
+  document.getElementById("invoiceNo")?.value || "",
 
 date:
-  document.getElementById("date").value,
+  document.getElementById("date")?.value || "",
 
 customerName:
-  document.getElementById("customerName").value,
+  document.getElementById("customerName")?.value || "",
 
 customerPhone:
-  document.getElementById("customerPhone").value,
+  document.getElementById("customerPhone")?.value || "",
 
 customerAddress:
-  document.getElementById("customerAddress").value,
+  document.getElementById("customerAddress")?.value || "",
 
 discount:
-  document.getElementById("discount").value,
+  document.getElementById("discount")?.value || "0",
 
 paid:
-  document.getElementById("paid").value,
+  document.getElementById("paid")?.value || "0",
 
 paymentStatus:
-  document.getElementById("paymentStatus").value,
+  document.getElementById("paymentStatus")?.value || "Pending",
 
 notes:
-  document.getElementById("notes").value,
+  document.getElementById("notes")?.value || "",
 
 total:
-  document.getElementById("total").textContent,
+  document.getElementById("total")?.textContent || "0.00",
 
 due:
-  document.getElementById("due").textContent,
+  document.getElementById("due")?.textContent || "0.00",
 
 items: []
 
@@ -200,17 +232,16 @@ document.querySelectorAll(".item").forEach(function (item) {
 invoice.items.push({
 
   name:
-    item.querySelector(".item-name").value,
+    item.querySelector(".item-name")?.value || "",
 
   qty:
-    item.querySelector(".item-qty").value,
+    item.querySelector(".item-qty")?.value || "0",
 
   rate:
-    item.querySelector(".item-rate").value,
+    item.querySelector(".item-rate")?.value || "0",
 
   amount:
-    item.querySelector(".item-amount").textContent
-
+    item.querySelector(".item-amount")?.textContent || "0.00"
 });
 
 });
@@ -229,56 +260,74 @@ alert("Invoice saved successfully!");
 
 async function downloadBillJPG() {
 
-const bill = document.getElementById("billArea");
+const bill =
+document.getElementById("billArea");
 
-if (!window.html2canvas) {
-alert("JPG feature load nahi hua. Internet ON karke page reload karo.");
+if (!bill) {
+alert("Bill area nahi mila.");
 return;
 }
 
-const oldTitle = document.title;
+if (!window.html2canvas) {
+
+alert(
+  "JPG feature load nahi hua. Internet ON karke page reload karo."
+);
+
+return;
+
+}
 
 const invoiceNo =
-document.getElementById("invoiceNo").value.trim() || "PW-BILL";
+document.getElementById("invoiceNo")?.value.trim()
+|| "PW-BILL";
 
-// Buttons temporarily hide
+// Hide buttons during JPG export
 bill.classList.add("export-mode");
 
-// Wait for rendering
-await new Promise(resolve => setTimeout(resolve, 300));
+await new Promise(function (resolve) {
+setTimeout(resolve, 300);
+});
 
 try {
 
-const canvas = await html2canvas(bill, {
+const canvas =
+  await html2canvas(bill, {
 
-  scale: 2,
+    scale: 2,
 
-  useCORS: true,
+    useCORS: true,
 
-  backgroundColor: "#ffffff",
+    allowTaint: false,
 
-  scrollX: 0,
+    backgroundColor: "#ffffff",
 
-  scrollY: -window.scrollY,
+    scrollX: 0,
 
-  windowWidth: bill.scrollWidth,
+    scrollY: -window.scrollY,
 
-  windowHeight: bill.scrollHeight
+    windowWidth: bill.scrollWidth,
 
-});
-
-
-const image = canvas.toDataURL(
-  "image/jpeg",
-  0.95
-);
+    windowHeight: bill.scrollHeight
+  });
 
 
-const link = document.createElement("a");
+const image =
+  canvas.toDataURL(
+    "image/jpeg",
+    0.95
+  );
+
+
+const link =
+  document.createElement("a");
+
 
 link.href = image;
 
-link.download = `${invoiceNo}-Bill.jpg`;
+link.download =
+  `${invoiceNo}-Bill.jpg`;
+
 
 document.body.appendChild(link);
 
@@ -288,15 +337,20 @@ document.body.removeChild(link);
 
 } catch (error) {
 
-console.error(error);
+console.error(
+  "JPG Error:",
+  error
+);
 
-alert("Bill JPG banane mein problem hui.");
+alert(
+  "Bill JPG banane mein problem hui."
+);
 
 } finally {
 
-bill.classList.remove("export-mode");
-
-document.title = oldTitle;
+bill.classList.remove(
+  "export-mode"
+);
 
 }
 }
@@ -308,66 +362,184 @@ document.title = oldTitle;
 function sendWhatsApp() {
 
 const phone =
-document.getElementById("customerPhone").value.trim();
+document
+.getElementById("customerPhone")
+?.value
+.trim() || "";
 
 const name =
-document.getElementById("customerName").value.trim();
+document
+.getElementById("customerName")
+?.value
+.trim() || "Customer";
 
 const invoiceNo =
-document.getElementById("invoiceNo").value.trim();
+document
+.getElementById("invoiceNo")
+?.value
+.trim() || "N/A";
 
 const total =
-document.getElementById("total").textContent;
+document
+.getElementById("total")
+?.textContent || "0.00";
 
 const due =
-document.getElementById("due").textContent;
+document
+.getElementById("due")
+?.textContent || "0.00";
 
-let message =
+// Remove spaces, +, -, brackets etc.
+let cleanPhone =
+phone.replace(/\D/g, "");
+
+// India number
+if (cleanPhone.length === 10) {
+
+cleanPhone =
+  "91" + cleanPhone;
+
+}
+
+// Check phone number
+if (cleanPhone.length < 11) {
+
+alert(
+  "Pehle Customer ka valid 10-digit mobile number enter karo."
+);
+
+return;
+
+}
+
+const message =
 `PARBEZ WORKS
 
-Invoice: ${invoiceNo || "N/A"}
-Customer: ${name || "N/A"}
+Invoice: ${invoiceNo}
+Customer: ${name}
 
 Total: ₹${total}
 Due: ₹${due}
 
-Electrical • False Ceiling • Plumbing`;
+Electrical • False Ceiling • Plumbing
 
-let cleanPhone = phone.replace(/\D/g, "");
+Thank you for choosing PARBEZ WORKS!`;
 
-if (cleanPhone.length === 10) {
-cleanPhone = "91" + cleanPhone;
-}
+// IMPORTANT:
+// Backticks use kiye gaye hain
+// taaki phone aur message actual URL mein aaye.
 
 const url =
 "https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}";
 
-window.open(url, "_blank");
+window.open(
+url,
+"_blank"
+);
 }
 
 // ==============================
-// CLEAR
+// CLEAR INVOICE
 // ==============================
 
 function clearInvoice() {
 
 const confirmClear =
-confirm("Kya aap poora invoice clear karna chahte hain?");
+confirm(
+"Kya aap poora invoice clear karna chahte hain?"
+);
 
-if (!confirmClear) return;
+if (!confirmClear) {
+return;
+}
 
-document.getElementById("invoiceNo").value = "";
-document.getElementById("customerName").value = "";
-document.getElementById("customerPhone").value = "";
-document.getElementById("customerAddress").value = "";
-document.getElementById("discount").value = "0";
-document.getElementById("paid").value = "0";
-document.getElementById("paymentStatus").value = "Pending";
-document.getElementById("notes").value = "";
+const invoiceNo =
+document.getElementById("invoiceNo");
 
-document.getElementById("items").innerHTML = "";
+const customerName =
+document.getElementById("customerName");
+
+const customerPhone =
+document.getElementById("customerPhone");
+
+const customerAddress =
+document.getElementById("customerAddress");
+
+const discount =
+document.getElementById("discount");
+
+const paid =
+document.getElementById("paid");
+
+const paymentStatus =
+document.getElementById("paymentStatus");
+
+const notes =
+document.getElementById("notes");
+
+if (invoiceNo) invoiceNo.value = "";
+
+if (customerName) customerName.value = "";
+
+if (customerPhone) customerPhone.value = "";
+
+if (customerAddress) customerAddress.value = "";
+
+if (discount) discount.value = "0";
+
+if (paid) paid.value = "0";
+
+if (paymentStatus) {
+paymentStatus.value = "Pending";
+}
+
+if (notes) notes.value = "";
+
+// Reset date
+const dateInput =
+document.getElementById("date");
+
+if (dateInput) {
+
+const today =
+  new Date();
+
+const yyyy =
+  today.getFullYear();
+
+const mm =
+  String(
+    today.getMonth() + 1
+  ).padStart(2, "0");
+
+const dd =
+  String(
+    today.getDate()
+  ).padStart(2, "0");
+
+
+dateInput.value =
+  `${yyyy}-${mm}-${dd}`;
+
+}
+
+// Reset items
+const items =
+document.getElementById("items");
+
+if (items) {
+
+items.innerHTML = "";
+
+itemCount = 0;
 
 addItem();
 
-calculateTotal();
 }
+
+localStorage.removeItem(
+"parbezWorksInvoice"
+);
+
+calculateTotal();
+    }
