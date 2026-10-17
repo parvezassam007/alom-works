@@ -2,12 +2,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Place an Order | Creative Corner</title>
+  <meta name="theme-color" content="#6025c0">
+  <meta name="description" content="Place your local order with My Local Store. Order everyday essentials and arrange local delivery through WhatsApp.">
+  <title>Place an Order | My Local Store</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body><header class="header">
-  <a href="index.html" class="brand"><span class="brand-icon">C</span><span>CREATIVE <b>CORNER</b><small>YOUR LOCAL SHOPPING PARTNER</small></span></a>
-  <button class="menu-btn" onclick="toggleMenu()" aria-label="Toggle navigation">☰</button>
+  <a href="index.html" class="brand">
+    <span class="brand-icon">M</span>
+    <span>MY <b>LOCAL STORE</b><small>YOUR LOCAL SHOPPING PARTNER</small></span>
+  </a><button class="menu-btn" onclick="toggleMenu()" aria-label="Toggle navigation">☰</button>
+
   <nav id="navigation">
     <a href="index.html">Home</a>
     <a class="active" href="order.html">Order Now</a>
@@ -19,9 +24,10 @@
     <span class="eyebrow">QUICK & EASY ORDERING</span>
     <h1>Place Your Order 🛍️</h1>
     <p>Enter your details. We'll confirm availability, price and delivery charges through WhatsApp.</p>
-  </div>  <div class="order-layout">
-    <form id="orderForm" class="form-card">
-      <h2>Customer Details</h2>  <label for="customerName">Full Name *</label>
+  </div>  <div class="order-layout"><form id="orderForm" class="form-card">
+  <h2>Customer Details</h2>
+
+  <label for="customerName">Full Name *</label>
   <input id="customerName" name="customerName" required maxlength="80" autocomplete="name" placeholder="Enter your full name">
 
   <label for="mobile">Mobile Number *</label>
@@ -85,6 +91,7 @@
 </form>
 
 <aside class="side-column">
+
   <div class="info-card">
     <span class="side-icon">💬</span>
     <h3>Order Confirmation</h3>
@@ -96,18 +103,18 @@
     <h3>PhonePe / UPI Payment</h3>
     <p>Pay only after confirming the amount and payment details with the seller.</p>
 
-    <!-- PhonePe QR Code -->
+    <!-- My Local Store PhonePe QR Code -->
     <img
       class="qr-image"
       src="IMG-20261017-WA0000.jpg"
-      alt="Creative Corner PhonePe payment QR code"
+      alt="My Local Store PhonePe payment QR code"
       onerror="this.style.display='none'; document.getElementById('qrPlaceholder').style.display='block';"
     >
 
     <div id="qrPlaceholder" class="qr-placeholder">
       <span>▦</span>
       <strong>Your PhonePe QR Code</strong>
-      <small>Upload IMG-20261017-WA0000.jpg to the website's root folder.</small>
+      <small>Upload IMG-20261017-WA0000.jpg to the same folder as order.html.</small>
     </div>
 
     <p class="warning">Please verify the recipient name and amount before paying. Never share your UPI PIN or OTP.</p>
@@ -121,17 +128,17 @@
     <p>Uddali Bazar: ₹50 for normal items.</p>
     <p>Large/heavy items: ₹50 per km; final distance and charge must be confirmed.</p>
   </div>
+
 </aside>
 
   </div>
 </main><footer class="footer">
-  <a href="index.html" class="footer-brand">🛍️ Creative Corner</a>
-  <p>Your local shopping partner.</p>
-  <div>
+  <a href="index.html" class="footer-brand">🛍️ My Local Store</a>
+  <p>Your local shopping partner.</p>  <div>
     <a href="index.html">Home</a>
     <a href="delivery.html">Delivery</a>
     <a href="contact.html">Contact</a>
-  </div>
-  <small>© <span id="year"></span> Creative Corner.</small>
+  </div><small>© <span id="year"></span> My Local Store. All rights reserved.</small>
+
 </footer><script src="script.js"></script></body>
 </html>
