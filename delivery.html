@@ -1,81 +1,72 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Delivery Charges | Creative Corner</title>
+  <title>Delivery Charges | My Local Store</title>
+  <meta name="description" content="Check local delivery charges for Phultoli Bazar, Uddali Bazar and nearby areas with My Local Store.">
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body><header class="header">
+  <a href="index.html" class="brand">
+    <span class="brand-icon">M</span>
+    <span>MY <b>LOCAL STORE</b><small>YOUR LOCAL SHOPPING PARTNER</small></span>
+  </a><button class="menu-btn" onclick="toggleMenu()" aria-label="Toggle navigation">☰</button>
 
-<header class="header">
-  <a href="index.html" class="brand"><span class="brand-icon">C</span><span>CREATIVE <b>CORNER</b><small>YOUR LOCAL SHOPPING PARTNER</small></span></a>
-  <button class="menu-btn" onclick="toggleMenu()" aria-label="Toggle navigation">☰</button>
   <nav id="navigation">
     <a href="index.html">Home</a>
     <a href="order.html">Order Now</a>
     <a class="active" href="delivery.html">Delivery</a>
     <a href="contact.html">Contact</a>
   </nav>
-</header>
-
-<main class="page-container">
+</header><main class="page-container">
   <div class="page-heading">
     <span class="eyebrow">CLEAR & SIMPLE PRICING</span>
     <h1>Delivery Charges 🚚</h1>
-    <p>Delivery fees depend on the location and type of item.</p>
-  </div>
+    <p>Delivery fees depend on your location and the type of item.</p>
+  </div>  <div class="delivery-grid"><div class="price-card">
+  <span class="price-icon">📍</span>
+  <h2>Phultoli Bazar</h2>
+  <div class="price">₹30</div>
+  <p>Normal and small items</p>
+  <a href="order.html" class="btn btn-primary">Place an Order</a>
+</div>
 
-  <div class="delivery-grid">
-    <div class="price-card">
-      <span class="price-icon">📍</span>
-      <h2>Phultoli Bazar</h2>
-      <div class="price">₹30</div>
-      <p>Normal and small items</p>
-      <a href="order.html" class="btn btn-primary">Place an Order</a>
-    </div>
+<div class="price-card featured">
+  <span class="price-icon">🛵</span>
+  <h2>Uddali Bazar</h2>
+  <div class="price">₹50</div>
+  <p>Normal and small items</p>
+  <a href="order.html" class="btn btn-white">Place an Order</a>
+</div>
 
-    <div class="price-card featured">
-      <span class="price-icon">🛵</span>
-      <h2>Uddali Bazar</h2>
-      <div class="price">₹50</div>
-      <p>Normal and small items</p>
-      <a href="order.html" class="btn btn-white">Place an Order</a>
-    </div>
+<div class="price-card">
+  <span class="price-icon">📦</span>
+  <h2>Large / Heavy Items</h2>
+  <div class="price">₹50<span class="per-unit">/km</span></div>
+  <p>Final charge depends on the confirmed distance.</p>
+  <a href="order.html" class="btn btn-primary">Request Delivery</a>
+</div>
 
-    <div class="price-card">
-      <span class="price-icon">📦</span>
-      <h2>Large / Heavy Items</h2>
-      <div class="price">₹50<span class="per-unit">/km</span></div>
-      <p>Final charge depends on the confirmed distance.</p>
-      <a href="order.html" class="btn btn-primary">Request Delivery</a>
-    </div>
-  </div>
-
-  <section class="notice-card">
+  </div>  <section class="notice-card">
     <h2>Important Information</h2>
     <ul>
-      <li>Delivery availability depends on the item's availability and delivery location.</li>
+      <li>Delivery availability depends on item availability and delivery location.</li>
       <li>For nearby areas outside the listed locations, please confirm the delivery fee first.</li>
       <li>Large/heavy-item distance and final fee are confirmed manually before payment.</li>
       <li>Item prices are not included in delivery charges.</li>
       <li>Medicine requests must comply with applicable pharmacy and prescription requirements.</li>
       <li>Gas cylinders must be arranged through an authorized gas supplier.</li>
     </ul>
-  </section>
-
-  <div class="center space-top">
+  </section>  <div class="center space-top">
     <a href="order.html" class="btn btn-primary">Order Now →</a>
   </div>
-</main>
+</main><footer class="footer">
+  <a href="index.html" class="footer-brand">🛍️ My Local Store</a>
+  <p>Your local shopping partner.</p>  <div>
+    <a href="index.html">Home</a>
+    <a href="order.html">Order</a>
+    <a href="contact.html">Contact</a>
+  </div><small>© <span id="year"></span> My Local Store. All rights reserved.</small>
 
-<footer class="footer">
-  <a href="index.html" class="footer-brand">🛍️ Creative Corner</a>
-  <p>Your local shopping partner.</p>
-  <div><a href="index.html">Home</a><a href="order.html">Order</a><a href="contact.html">Contact</a></div>
-  <small>© <span id="year"></span> Creative Corner.</small>
-</footer>
-
-<script src="script.js"></script>
-</body>
+</footer><script src="script.js"></script></body>
 </html>
